@@ -137,6 +137,30 @@ export default function Customer() {
     setSelected([]);
   };
 
+  const deleteUser = ()=>{
+    const deleterequestdata = {
+      "type" : "SP_CALL",
+    "requestId" : 1600004,
+       request: {
+    "id" : cId
+      }
+    }
+    
+    axios.post(ServiceURL,deleterequestdata).then((res) => {
+      console.log(res);   
+      display();
+        }).catch(() => {
+            console.log('No internet connection found. App is running in offline mode.');
+          });
+             }
+
+
+             const editUser = ()=>{
+
+             }
+
+
+
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
     setOpen(true);
     const add = (data) => {
@@ -246,23 +270,7 @@ export default function Customer() {
                         </TableCell> */}
 
                         <TableCell align="right"  >
-                          <UserMoreMenu callback={()=>{
-const deleterequestdata = {
-  "type" : "SP_CALL",
-"requestId" : 1600004,
-   request: {
-"id" : cId
-  }
-}
-
-
-axios.post(ServiceURL,deleterequestdata).then((res) => {
-  console.log(res);   
-  display();
-    }).catch(() => {
-        console.log('No internet connection found. App is running in offline mode.');
-      });
-                          }}/>
+                          <UserMoreMenu callback={deleteUser} editUser={handleAdd}/>
                         </TableCell>
                       </TableRow>
                     );

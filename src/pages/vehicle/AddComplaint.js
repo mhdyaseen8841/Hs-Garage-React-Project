@@ -21,25 +21,29 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
+
 import ServiceURL from '../../constants/url';
+
+import Camera from '../../utils/Camera';
+
 
 export default function AddComplaint(details) {
   const [update, setUpdate] = useState(details.updated);
+  const [imagedata, setImageData] = useState('');
+  const [complaints,setComplaints]=useState('')
+
   const validSchema = Yup.object().shape({
-    CustomerName: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Name is required'),
-    Mobnum: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Mobnum is required'),
-    Email: Yup.string().email("Invalid Format").matches(/^\S/, 'Whitespace is not allowed'),
-    Address: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Address is required'),
+    Complaint: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Complaint is required'),
+    Problem: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Problem is required'),
+  
   });
 
   const [alertMsg, setAlert] = useState();
   const formik = useFormik({
     initialValues: {
-      CustomerName: update ? details.data.CustomerName : '',
-      Mobnum: update ? details.data.Mobnum : '',
-      Email: update ? details.data.Email : '',
-      Address: update ? details.data.Address : '',
+      Complaint: update ? details.data.Complaint : '',
+      Problem: update ? details.data.Problem : '',
+      
     },
     validationSchema: validSchema,
     onSubmit: (values, actions) => {
@@ -59,41 +63,71 @@ export default function AddComplaint(details) {
   //   console.log(details.updated);
   // }, []);
 
-  
+  function handleAddNew(){
+    console.log("hloooooooooooooooooo");
+   console.log(imagedata);
+    setComplaints([...complaints, {
+      id: Date.now(),
+      complaints: values.Complaint,
+      problem: values.Problem,
+      image: imagedata?imagedata:''
+   }]);
+   
+console.log(values.Complaint);
+console.log(values.Problem);
+setImageData('');
+
+console.log(complaints);
+
+  }
 
   const onAdd = () => {
-    console.log(values);
+    console.log("hlooooooooooooooooooo");
+    console.log(localStorage.getItem('vId'));
+    setComplaints([...complaints, {
+      id: Date.now(),
+      complaints: values.Complaint,
+      problem: values.Problem,
+      image: imagedata?imagedata:''
+   }]);
+   
     const requestdata = 
     {
-      "type":"SP_CALL",
-      "requestId":1600001,
-      "request":{
-        "name":values.CustomerName,
-        "mobile" : values.Mobnum,
-    "email" : values.Email,
-        "place" :values.Address
-
+      "type" : "SP_CALL",
+   "requestId" : 1800001,
+       "request": {
+        "vId" : localStorage.getItem('vId'),
+ "complaints" : complaints
       }
-    }
+}
+
       
       axios.post(ServiceURL,requestdata).then((res) => {
-        if(res.data.errorCode===1)
-{
-  console.log(res);
-  setAlert();
+        
+//         if(res.data.errorCode===1)
+// {
+//   console.log(res);
+//   setAlert();
+//   details.submit(res.data.result);
+// }       else{
+//   console.log(res)
+//   console.log(res.data.errorMsg);
+//   setAlert(res.data.errorMsg);
+// }
+setAlert();
+console.log(res.data);
   details.submit(res.data.result);
-}       else{
-  console.log(res)
-  console.log(res.data.errorMsg);
-  setAlert(res.data.errorMsg);
-}
+
       }).catch(() => {
           console.log('No internet connection found. App is running in offline mode.');
         });
     
    
   };
-  
+
+  const handleCallback = (imgData) => {
+    setImageData(imgData);
+  };
   const alertTimeOut = () => {
     setTimeout(() => {
       setAlert();
@@ -129,26 +163,27 @@ export default function AddComplaint(details) {
            
               fullWidth
               type="text"
-              label="Mobile Number"
+              label="Complaint"
               variant="outlined"
               value={details.update ? details.data.name : ''}
-              {...getFieldProps('Mobnum')}
+              {...getFieldProps('Complaint')}
               error={Boolean(touched.Mobnum && errors.Mobnum || alertMsg)}
               helperText={touched.Mobnum && errors.Mobnum || alertMsg}
             />
             {}
             <TextField
+
               fullWidth
               type="text"
-              label="Customer Name"
+              label="Problem"
               variant="outlined"
-              {...getFieldProps('CustomerName')}
+              {...getFieldProps('Problem')}
               error={Boolean(touched.CustomerName && errors.CustomerName)}
               helperText={touched.CustomerName && errors.CustomerName}
             />
            
-           <CameraAltIcon /> 
-            
+           <Camera   callback={handleCallback} /> 
+           <Button onClick={handleAddNew} variant="text">Add New +</Button>
           </Stack>
         </Container>
         <TableContainer component={Paper}>
@@ -162,13 +197,17 @@ export default function AddComplaint(details) {
           </TableRow>
         </TableHead>
         <TableBody>
+          { complaints && complaints.map((row) => (
+        
             <TableRow>
               <TableCell component="th" scope="row">
-                hello
+                {row.complaints}
               </TableCell>
-              <TableCell align="right">DFA</TableCell>
-              <TableCell align="right">SADF</TableCell>
+              <TableCell align="right">{row.problem}</TableCell>
+              <TableCell align="right">Image</TableCell>
             </TableRow>
+          )
+)}
         </TableBody>
       </Table>
     </TableContainer>
