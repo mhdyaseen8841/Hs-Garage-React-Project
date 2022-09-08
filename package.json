@@ -52,6 +52,7 @@
     "axios": "^0.27.2",
     "change-case": "^4.1.2",
     "compress-images": "^2.0.5",
+    "compressorjs": "^1.1.1",
     "date-fns": "^2.28.0",
     "dayjs": "^1.11.5",
     "formik": "^2.2.9",
