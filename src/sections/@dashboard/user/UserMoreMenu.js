@@ -49,7 +49,7 @@ export default function UserMoreMenu(props,editprops) {
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
           </ListItemIcon>
-          <ListItemText onClick={editprops.editUser(e, upd = true, button = 'EDIT',data = {})} primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText /*onClick={editprops.editUser(e, upd = true, button = 'EDIT',data = {})}*/ primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
       </Menu>
     </>

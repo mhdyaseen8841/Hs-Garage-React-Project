@@ -239,7 +239,7 @@ const [user,username] = useState("username");
                             <Typography variant="subtitle2" noWrap
                             onClick={()=>{
                               localStorage.setItem('vId', vId);
-                             navigate('/dashboard/')
+                             navigate('/dashboard')
                            }}>
                               {visitDate}
                             </Typography>

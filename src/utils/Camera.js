@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-
+import Compressor from 'compressorjs';
 const Camera = (getProps) => {
     const inputRef = useRef(null);
     const [imgPreview, setImgPreview] = useState();
@@ -29,7 +29,8 @@ const Camera = (getProps) => {
           };
         });
       };
-
+      
+     
 
     const handleFileChange = event => {
         const fileObj = event.target.files && event.target.files[0];
@@ -38,24 +39,36 @@ const Camera = (getProps) => {
         }
         setImgPreview(URL.createObjectURL(event.target.files[0]))
 
+        new Compressor(event.target.files[0], {      
+            quality: 0.4,
+            success: (compressedResult) => {
+
+                console.log(compressedResult);
+                getBase64(compressedResult).then((result) => {
+                    setimgbase64(result);
+                    console.log(localStorage.getItem('vId'));
+                    console.log(result);
+                    getProps.callback(result)
+                  
+                   
 
 
-        getBase64(event.target.files[0]).then((result) => {
-            setimgbase64(result);
-            console.log("heyyyyyyyyyyyyyyyyyy");
-            getProps.callback(result)
-            console.log(result);
-            // setImageDetails([
-            //   {
-            //     base64: result,
-            //     type: acceptedFiles[0].type,
-            //     name: acceptedFiles[0].name,
-            //     size: acceptedFiles[0].size
-            //   }
-            // ]);
-          }).catch((err) => {
-          console.log("error", err);
-        })
+
+                    // setImageDetails([
+                    //   {
+                    //     base64: result,
+                    //     type: acceptedFiles[0].type,
+                    //     name: acceptedFiles[0].name,
+                    //     size: acceptedFiles[0].size
+                    //   }
+                    // ]);
+                  }).catch((err) => {
+                  console.log("error", err);
+                })
+            },
+          });
+
+       
 
         // document.getElementById('blah').src = URL.createObjectURL(event.target.files[0]);
         // console.log('fileObj is', fileObj);
