@@ -95,9 +95,13 @@ export default function Customer() {
     }
       const display =()=>{
         axios.post(ServiceURL,requestdata).then((res) => {
-      
+       if(res.data.errorCode === 0){
           console.log(res.data);
           setUserList(res.data.result);
+       }
+       else{
+        setUserList([]);
+       }
         }).catch(() => {
             console.log('No internet connection found. App is running in offline mode.');
           });
@@ -142,7 +146,7 @@ export default function Customer() {
       "type" : "SP_CALL",
     "requestId" : 1600004,
        request: {
-    "id" : cId
+    "id" : "cId"
       }
     }
     
@@ -153,8 +157,6 @@ export default function Customer() {
             console.log('No internet connection found. App is running in offline mode.');
           });
              }
-
-
              const editUser = ()=>{
 
              }
@@ -167,7 +169,6 @@ export default function Customer() {
       console.log(data);
       setDialog();
       localStorage.setItem('cId', data.cId);
-    
       navigate('/dashboard/customerdetails');
     };
     setDialog(() => (
@@ -245,7 +246,7 @@ export default function Customer() {
                  // onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { cId, id, name, role, mobile, address } = row;
                     const title=name;
                   //  const isItemSelected = selected.indexOf(name) !== -1;

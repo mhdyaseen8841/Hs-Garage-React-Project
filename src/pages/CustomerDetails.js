@@ -266,7 +266,7 @@ export default function CustomerDetails() {
                         </TableCell>
 
                         <TableCell align="right"  >
-                          <UserMoreMenu />
+                          <UserMoreMenu  />
                         </TableCell>
                       </TableRow>
                     );
