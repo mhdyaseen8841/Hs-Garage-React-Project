@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { faker } from '@faker-js/faker';
 import dayjs from 'dayjs';
-// @mui
+// @muii
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography, TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
