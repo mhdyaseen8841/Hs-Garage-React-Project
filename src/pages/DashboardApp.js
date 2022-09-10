@@ -1,7 +1,12 @@
+import { useState, useEffect } from 'react';
 import { faker } from '@faker-js/faker';
+import dayjs from 'dayjs';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography } from '@mui/material';
+import { Grid, Container, Typography, TextField } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // components
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
@@ -17,73 +22,117 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../sections/@dashboard/app';
+import requestPost from '../serviceWorker';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
-
+  const [startdate, setStartDate] = useState(dayjs().startOf('month'));
+  const [stopdate, setStopDate] = useState(dayjs());
+  const [counts, setCounts] = useState({});
+  const [chartData, setChartData] = useState([]);
+  const [chartlabel, setChartLable]  = useState([]);
+  const dateChange = (date1,date2) => {
+    const requestdata = {
+      "type": "SP_CALL",
+    "requestId": 6511353,
+    "request": {
+      "startDate": date1.format("YYYY/MM/DD"),
+      "stopDate" : date2.format("YYYY/MM/DD")
+      }
+    }
+    requestPost(requestdata).then((res)=>{
+      if(res.data.errorCode === 0){
+        console.log(res.data.result)
+        const label = []
+        const cdata = []
+        res.data.result.chart.map((data)=>{
+           label.push(data.date)
+           cdata.push(data.amount)
+           return data;
+        })
+        console.log(cdata);
+        console.log(label);
+        setChartData(cdata);
+        setChartLable(label)
+        // console.log(chartData);
+        // console.log(chartlabel);
+      }
+      else{
+         console.log(res.data.errorMsg)
+         setChartData([])
+      }
+    })
+}
+  useEffect(() => {
+    const requestData = {
+      "type": "SP_CALL",
+      "requestId": 6511352,
+      "request": {}
+    }
+    requestPost(requestData).then((res)=>{
+      if(res.data.errorCode === 1){
+        setCounts(res.data.result)
+      }
+    })
+    dateChange(startdate,stopdate);
+  }, [])
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
         </Typography>
-
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
+          <Grid item xs={12} sm={6} md={4}>
+            <AppWidgetSummary title="TOTAL HAPPY CUSTOMERS" total={counts.customerCount} icon={'ant-design:smile-filled'} />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
+          <Grid item xs={12} sm={6} md={4}>
+            <AppWidgetSummary title="TOTAL VEHICLES" total={counts.vehicleCount} color="info" icon={'ant-design:car-filled'} />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Item Orders" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
+          <Grid item xs={12} sm={6} md={4}>
+            <AppWidgetSummary title="TOTAL COMPLAINTS" total={counts.complaintCount} color="warning" icon={'ant-design:warning-filled'} />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
+          <Grid item xs={12} md={12} lg={12} >
+            <Typography variant="h6" sx={{ mb: 5 }}>
+              Search Dates
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                disableFuture
+                label="FROM"
+                openTo="day"
+                value={startdate}
+                onChange={(newValue) => {
+                  setStartDate(newValue)
+                  dateChange(newValue,stopdate);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <DatePicker
+                disableFuture
+                label="TO"
+                openTo="day"
+                firstDate={startdate.format('YYYY-MM-DD')}
+                value={stopdate}
+                onChange={(newValue) => {
+                  setStopDate(newValue);
+                  dateChange(startdate,newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </Grid>
-
-          <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12} md={6} lg={12}>
             <AppWebsiteVisits
-              title="Website Visits"
-              subheader="(+43%) than last year"
-              chartLabels={[
-                '01/01/2003',
-                '02/01/2003',
-                '03/01/2003',
-                '04/01/2003',
-                '05/01/2003',
-                '06/01/2003',
-                '07/01/2003',
-                '08/01/2003',
-                '09/01/2003',
-                '10/01/2003',
-                '11/01/2003',
-              ]}
-              chartData={[
-                {
-                  name: 'Team A',
-                  type: 'column',
-                  fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                },
-                {
-                  name: 'Team B',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-                },
-                {
-                  name: 'Team C',
-                  type: 'line',
-                  fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                },
-              ]}
+              title="SALES"
+              subheader="price"
+              chartLabels={chartlabel}
+              chartData={ [{name:'AMOUNT',type:'column',fill:'solid', data: chartData}]}
             />
           </Grid>
 

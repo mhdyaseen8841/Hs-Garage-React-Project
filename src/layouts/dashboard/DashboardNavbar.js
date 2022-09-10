@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+
 // components
 import Iconify from '../../components/Iconify';
 //
@@ -41,6 +43,7 @@ DashboardNavbar.propTypes = {
 };
 
 export default function DashboardNavbar({ onOpenSidebar }) {
+  
   return (
     <RootStyle>
       <ToolbarStyle>

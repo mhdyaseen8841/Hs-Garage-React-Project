@@ -18,6 +18,18 @@ import AddComplaint from './pages/vehicle/AddComplaint';
 
 export default function Router() {
   return useRoutes([
+    { path: '404', element: <NotFound /> },
+    {
+      path: '/',
+      element: <Login />,
+      children: [
+        { path: '/', element: <Navigate to="/dashboard/app" /> },
+        { path: 'login', element: <Login /> },
+        { path: 'register', element: <Register /> },
+        { path: '404', element: <NotFound /> },
+        { path: '*', element: <Navigate to="/404" /> },
+      ],
+    },
     {
       path: '/dashboard',
       element: <DashboardLayout />,
@@ -28,20 +40,8 @@ export default function Router() {
         { path: 'blog', element: <Blog /> },
         {path:'customerdetails', element: <CustomerDetails/> },
         {path:'VehicleDetails', element: <VehicleDetails/> },
-        
-      ],
-    },
-    { path: '/demo', element: <AddComplaint /> },
-    {
-      path: '/',
-      element: <Login />,
-      children: [
-        { path: '/', element: <Navigate to="/dashboard/app" /> },
-        
-        { path: 'login', element: <Login /> },
-        { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
-        { path: '*', element: <Navigate to="/404" /> },
+        { path: '*', element: <Navigate to="/404" /> }
       ],
     },
     { path: '*', element: <Navigate to="/404" replace /> },

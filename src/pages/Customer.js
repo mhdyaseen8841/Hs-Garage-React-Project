@@ -23,6 +23,7 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
+
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -31,19 +32,21 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 import FullScreenDialog from './customer/addCustomer';
+import requestPost from '../serviceWorker';
 // mock
 // import USERLIST from '../_mock/user';
 import ServiceURL from '../constants/url';
+
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'last visited', alignRight: false },
+  { id: 'mobile', label: 'Mobile', alignRight: false },
+  { id: 'address', label: 'Address', alignRight: false },
   
-  { id: 'status', label: 'Status', alignRight: false },
-  // { id: '' },
+  { id: 'status', label: 'lastVisit', alignRight: false },
+  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -90,14 +93,17 @@ export default function Customer() {
       "type":"SP_CALL",
       "requestId":1600005,
       "request":{
-  
       }
     }
       const display =()=>{
-        axios.post(ServiceURL,requestdata).then((res) => {
-      
+        requestPost(requestdata).then((res) => {
+       if(res.data.errorCode === 0){
           console.log(res.data);
           setUserList(res.data.result);
+       }
+       else{
+        setUserList([]);
+       }
         }).catch(() => {
             console.log('No internet connection found. App is running in offline mode.');
           });
@@ -142,7 +148,7 @@ export default function Customer() {
       "type" : "SP_CALL",
     "requestId" : 1600004,
        request: {
-    "id" : cId
+    "id" : "cId"
       }
     }
     
@@ -153,8 +159,6 @@ export default function Customer() {
             console.log('No internet connection found. App is running in offline mode.');
           });
              }
-
-
              const editUser = ()=>{
 
              }
@@ -167,7 +171,6 @@ export default function Customer() {
       console.log(data);
       setDialog();
       localStorage.setItem('cId', data.cId);
-    
       navigate('/dashboard/customerdetails');
     };
     setDialog(() => (
@@ -245,21 +248,19 @@ export default function Customer() {
                  // onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { cId, id, name, role, mobile, address } = row;
                     const title=name;
                   //  const isItemSelected = selected.indexOf(name) !== -1;
                     return (
                       <TableRow>                      
-                        <TableCell component="th" scope="row" padding="none" >
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="subtitle2" noWrap onClick={()=>{
+                        <TableCell component="th" scope="row" >
+                            <Typography variant="h6"  sx={{cursor: "pointer"}} onClick={()=>{
                                localStorage.setItem('cId', cId);
                               navigate('/dashboard/customerdetails',{state:row})
                             }}>
                               {name}
                             </Typography>
-                          </Stack>
                         </TableCell>
                         <TableCell align="left">{mobile}</TableCell>
                         <TableCell align="left">{address}</TableCell>
