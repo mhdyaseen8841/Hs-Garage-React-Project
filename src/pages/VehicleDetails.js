@@ -22,6 +22,7 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -201,6 +202,7 @@ const [user,username] = useState("username");
     <Page title="User">
       <Container>
       {addDialog}
+      <KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={()=>{navigate(-1)}} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
          vehicle complaints
@@ -233,17 +235,15 @@ const [user,username] = useState("username");
                     return (
                       <TableRow >
                       
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
+                        <TableCell component="th" scope="row">
                             {/* <Avatar alt={name} src={avatarUrl} /> */}
-                            <Typography variant="subtitle2" noWrap
+                            <Typography variant="subtitle2" sx={{cursor: "pointer"}}
                             onClick={()=>{
                               localStorage.setItem('vId', vId);
                              navigate('/dashboard')
                            }}>
                               {visitDate}
                             </Typography>
-                          </Stack>
                         </TableCell>
                         <TableCell align="left">{pickDate}</TableCell>
                        

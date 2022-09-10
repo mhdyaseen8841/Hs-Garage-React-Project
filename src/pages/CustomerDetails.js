@@ -21,6 +21,7 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -213,6 +214,7 @@ export default function CustomerDetails() {
     <Page title="User">
       <Container>
       {addDialog}
+      <KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={()=>{navigate(-1)}} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
           {user}
@@ -244,17 +246,14 @@ export default function CustomerDetails() {
 
                     return (
                       <TableRow >
-                      
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="subtitle2" noWrap
+                        <TableCell component="th" scope="row">
+                            <Typography variant="h6" sx={{cursor: "pointer"}}
                             onClick={()=>{
                               localStorage.setItem('vId', vId);
                              navigate('/dashboard/vehicleDetails')
                            }}>
                               {number}
                             </Typography>
-                          </Stack>
                         </TableCell>
                         <TableCell align="left">{Company}</TableCell>
                        
@@ -264,7 +263,6 @@ export default function CustomerDetails() {
                             {year}
                           </Label>
                         </TableCell>
-
                         <TableCell align="right"  >
                           <UserMoreMenu  />
                         </TableCell>

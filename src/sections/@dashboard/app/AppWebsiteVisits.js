@@ -15,19 +15,24 @@ AppWebsiteVisits.propTypes = {
   chartLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default function AppWebsiteVisits({ title, subheader, chartLabels, chartData, ...other }) {
+export default function AppWebsiteVisits({ firstDate,title, subheader, chartLabels, chartData, ...other }) {
   const chartOptions = merge(BaseOptionChart(), {
     plotOptions: { bar: { columnWidth: '16%' } },
     fill: { type: chartData.map((i) => i.fill) },
     labels: chartLabels,
-    xaxis: { type: 'datetime' },
+    xaxis: {
+      type:'datetime',
+      min: firstDate,
+      labels: {
+      format: 'dd/MM',
+    }},
     tooltip: {
       shared: true,
       intersect: false,
       y: {
         formatter: (y) => {
           if (typeof y !== 'undefined') {
-            return `${y.toFixed(0)} visits`;
+            return `${y.toFixed(0)} AED`;
           }
           return y;
         },

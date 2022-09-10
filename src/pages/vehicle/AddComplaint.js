@@ -63,20 +63,19 @@ export default function AddComplaint(details) {
   //   console.log(details.updated);
   // }, []);
 
-  function handleAddNew(){
+  const handleAddNew = ()=>{
     console.log("hloooooooooooooooooo");
    console.log(imagedata);
     setComplaints([...complaints, {
       id: Date.now(),
       complaints: values.Complaint,
       problem: values.Problem,
-      image: imagedata?imagedata:''
+      image: !imagedata ? '' :imagedata
    }]);
    
 console.log(values.Complaint);
 console.log(values.Problem);
 setImageData('');
-
 console.log(complaints);
 
   }
@@ -88,7 +87,7 @@ console.log(complaints);
       id: Date.now(),
       complaints: values.Complaint,
       problem: values.Problem,
-      image: imagedata?imagedata:''
+      image: !imagedata ? '' :imagedata
    }]);
    
     const requestdata = 
