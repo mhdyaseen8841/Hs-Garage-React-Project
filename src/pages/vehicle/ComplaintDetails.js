@@ -1,4 +1,4 @@
-import { filter } from 'lodash';
+import { filter, set } from 'lodash';
 import axios from 'axios';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
@@ -24,25 +24,24 @@ import {
 } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 // components
-import Page from '../components/Page';
-import Label from '../components/Label';
-import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
-import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
-import FullScreenDialog from './vehicle/addVehicle';
-import AddComplaint from './vehicle/AddComplaint';
+import Page from '../../components/Page';
+import Label from '../../components/Label';
+import Scrollbar from '../../components/Scrollbar';
+import Iconify from '../../components/Iconify';
+import SearchNotFound from '../../components/SearchNotFound';
+import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user';
+
 // mock
 // import USERLIST from '../_mock/user';
-import ServiceURL from '../constants/url';
+import ServiceURL from '../../constants/url';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'VisitDate', label: 'Visit date', alignRight: false },
-  { id: 'PickDate', label: 'Pick date', alignRight: false },
+  { id: 'Complaints', label: 'Complaints', alignRight: false },
+  { id: 'Problem', label: 'Problem', alignRight: false },
   
-  { id: 'Remarks', label: 'Remarks', alignRight: false },
+  { id: 'Image', label: 'Image', alignRight: false },
   { id: '' },
 ];
 
@@ -77,7 +76,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function VehicleDetails(props) {
+export default function ComplaintDetails(props) {
   const navigate = useNavigate()
   const data = useLocation();
 
@@ -105,20 +104,29 @@ const [user,username] = useState("username");
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [USERLIST,setUserList] = useState([]);
+
+  const [vehicleDetails,setVehicleDetails] = useState('');
   const requestdata = 
-    {
-      "type":"SP_CALL",
-      "requestId":1800005,
-      "request":{
-        "vId" : localStorage.getItem("vId")
-      }
+  {
+    "type" : "SP_CALL",
+ "requestId" : 1800006,
+     "request": {
+      "cmId" : localStorage.getItem("cmId"),
     }
+}
+
+
       const displayComplaints =()=>{
+        console.log(requestdata);
         axios.post(ServiceURL,requestdata).then((res) => {
-      
-          console.log(res.data);
+      console.log(res);
+          console.log(res.data.result.complaints);
           setUserList(res.data.result.complaints);
-        }).catch(() => {
+          
+          setVehicleDetails({"vehicleModel":res.data.result.model,"vehicleNumber":res.data.result.number});
+console.log(vehicleDetails);
+        }).catch((err) => {
+          console.log(err);
             console.log('No internet connection found. App is running in offline mode.');
           });
       }
@@ -135,21 +143,22 @@ const [user,username] = useState("username");
 
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
     setOpen(true);
-    const add = (title) => {
-      console.log(title);
+    const add = (res) => {
+      console.log(res);
       setDialog();
+      
       // navigate('/dashboard/customerdetails', {state:{name:title}});
     };
-    setDialog(() => (
-      <AddComplaint
-        onClose={handleClose}
-        open={open}
-         submit={add}
-         updated={upd}
-         button={button}
-         data={data}
-      />
-    ));
+    // setDialog(() => (
+    //   <AddComplaint
+    //     onClose={handleClose}
+    //     open={open}
+    //      submit={add}
+    //      updated={upd}
+    //      button={button}
+    //      data={data}
+    //   />
+    // ));
   };
 
 
@@ -205,11 +214,24 @@ const [user,username] = useState("username");
       <KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={()=>{navigate(-1)}} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-         vehicle complaints
+         Complaint Details
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" onClick={handleAdd} startIcon={<Iconify icon="eva:plus-fill" />}>
+
+          {/* <Button variant="contained" component={RouterLink} to="#" onClick={handleAdd} startIcon={<Iconify icon="eva:plus-fill" />}>
             New Complaint
-          </Button>
+          </Button> */}
+        </Stack>
+
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4" gutterBottom>
+         {vehicleDetails.vehicleNumber}
+          </Typography>
+          <Typography variant="h4" gutterBottom>
+          {vehicleDetails.vehicleModel}
+          </Typography>
+          {/* <Button variant="contained" component={RouterLink} to="#" onClick={handleAdd} startIcon={<Iconify icon="eva:plus-fill" />}>
+            New Complaint
+          </Button> */}
         </Stack>
 
         <Card>
@@ -229,7 +251,8 @@ const [user,username] = useState("username");
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { vId,id,remark, pickDate, visitDate, status, company, avatarUrl, isVerified } = row;
+                   
+                    const { cdId, complaint, problem, image, status, company, avatarUrl, isVerified } = row;
                   //  const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -239,17 +262,28 @@ const [user,username] = useState("username");
                             {/* <Avatar alt={name} src={avatarUrl} /> */}
                             <Typography variant="subtitle2" sx={{cursor: "pointer"}}
                             onClick={()=>{
-                              localStorage.setItem('vId', vId);
-                             navigate('/dashboard')
+                              
                            }}>
-                              {visitDate}
+                              {complaint}
                             </Typography>
                         </TableCell>
-                        <TableCell align="left">{pickDate}</TableCell>
+                        <TableCell align="left">{problem}</TableCell>
                        
                         
                         <TableCell align="left">
-                        {remark}
+                    
+
+         { image ? <img
+          style={{width: 300, height: 'auto', objectFit: 'fill' }}
+          id="blah"
+          src={`${image}`}
+          alt="no network"
+      /> :  <Typography variant="subtitle2" sx={{cursor: "pointer"}}
+     >
+        No Image
+      </Typography>
+
+         }
                         </TableCell>
 
                         <TableCell align="right"  >

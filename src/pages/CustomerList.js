@@ -159,7 +159,30 @@ export default function Customer() {
             console.log('No internet connection found. App is running in offline mode.');
           });
              }
+
+
              const editUser = ()=>{
+
+const requestdata =
+  {
+    "type" : "SP_CALL",
+ "requestId" : 1600003,
+     "request": {
+      "name":"nam",
+      "mobile" : "mob",
+  "email" : "email",
+      "place" : "place",
+"id" : "id"
+    }
+}
+
+axios.post(ServiceURL,requestdata).then((res) => {
+  console.log(res);   
+  display();
+    }).catch(() => {
+        console.log('No internet connection found. App is running in offline mode.');
+      });
+         }
 
              }
 
