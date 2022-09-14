@@ -127,7 +127,7 @@ export default function DashboardApp() {
               />
             </LocalizationProvider>
           </Grid>
-          <Grid item xs={12} md={6} lg={12}>
+          <Grid item xs={12} md={12} lg={12}>
             <AppWebsiteVisits
               title="SALES"
               subheader="price"
