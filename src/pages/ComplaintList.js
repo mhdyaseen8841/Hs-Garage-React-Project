@@ -156,6 +156,25 @@ displayComplaints()
   };
 
 
+
+  const deleteUser = (cmId)=>{
+    const deleterequestdata =
+    {
+         "type" : "SP_CALL",
+      "requestId" : 1800002,
+          "request": {
+           "cmId" :cmId
+          }
+        }  
+    
+    axios.post(ServiceURL,deleterequestdata).then((res) => {
+      console.log(res);   
+      displayComplaints();
+        }).catch(() => {
+            console.log('No internet connection found. App is running in offline mode.');
+          });
+             }
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = USERLIST.map((n) => n.name);
@@ -257,7 +276,7 @@ displayComplaints()
                         </TableCell>
 
                         <TableCell align="right"  >
-                          <UserMoreMenu />
+                          <UserMoreMenu callback={()=>{deleteUser(cmId)}} editUser={(e)=>handleAdd(e,true,'EDIT',row)} noEdit />
                         </TableCell>
                       </TableRow>
                     );

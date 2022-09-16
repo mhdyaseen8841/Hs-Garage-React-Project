@@ -98,6 +98,7 @@ export default function Customer() {
       const display =()=>{
         requestPost(requestdata).then((res) => {
        if(res.data.errorCode === 0){
+        console.log(res.data.result);
           console.log(res.data);
           setUserList(res.data.result);
        }
@@ -143,12 +144,12 @@ export default function Customer() {
     setSelected([]);
   };
 
-  const deleteUser = ()=>{
+  const deleteUser = (cid)=>{
     const deleterequestdata = {
       "type" : "SP_CALL",
     "requestId" : 1600004,
        request: {
-    "id" : "cId"
+    "id" : cid
       }
     }
     
@@ -161,40 +162,24 @@ export default function Customer() {
              }
 
 
-             const editUser = ()=>{
+         
+    
 
-const requestdata =
-  {
-    "type" : "SP_CALL",
- "requestId" : 1600003,
-     "request": {
-      "name":"nam",
-      "mobile" : "mob",
-  "email" : "email",
-      "place" : "place",
-"id" : "id"
-    }
-}
-
-axios.post(ServiceURL,requestdata).then((res) => {
-  console.log(res);   
-  display();
-    }).catch(() => {
-        console.log('No internet connection found. App is running in offline mode.');
-      });
-         }
-
-             }
+             
 
 
 
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
     setOpen(true);
+    console.log(data)
     const add = (data) => {
-      console.log(data);
       setDialog();
-      localStorage.setItem('cId', data.cId);
-      navigate('/dashboard/customerdetails');
+      if(!upd){
+        localStorage.setItem('cId', data.cId);
+        navigate('/dashboard/customerdetails');
+      }
+        display();
+      
     };
     setDialog(() => (
       <FullScreenDialog
@@ -294,7 +279,7 @@ axios.post(ServiceURL,requestdata).then((res) => {
                         </TableCell> */}
 
                         <TableCell align="right"  >
-                          <UserMoreMenu callback={deleteUser} editUser={handleAdd}/>
+                          <UserMoreMenu callback={()=>{deleteUser(cId)}} editUser={(e)=>handleAdd(e,true,'EDIT',row)}/>
                         </TableCell>
                       </TableRow>
                     );

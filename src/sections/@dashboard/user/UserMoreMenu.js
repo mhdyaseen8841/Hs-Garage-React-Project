@@ -10,7 +10,7 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserMoreMenu(props,editprops) {
+export default function UserMoreMenu(props) {
   
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -22,6 +22,11 @@ export default function UserMoreMenu(props,editprops) {
  props.callback();
   }
 
+  const edituser = ()=>{
+    console.log("------------------------------------");
+    setIsOpen(false);
+    props.editUser();
+  }
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -49,8 +54,10 @@ export default function UserMoreMenu(props,editprops) {
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
           </ListItemIcon>
+          
 
-          <ListItemText onClick={(e)=>{editprops.editUser(e,  true,'EDIT',{}); setIsOpen(false);}} primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
+  <ListItemText onClick={edituser} primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
+
 
         </MenuItem>
       </Menu>

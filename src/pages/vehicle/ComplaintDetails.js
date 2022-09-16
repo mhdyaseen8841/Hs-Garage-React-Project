@@ -120,8 +120,12 @@ const [user,username] = useState("username");
         console.log(requestdata);
         axios.post(ServiceURL,requestdata).then((res) => {
       console.log(res);
-          console.log(res.data.result.complaints);
-          setUserList(res.data.result.complaints);
+          if(res.data.result.complaints){
+            setUserList(res.data.result.complaints);
+          }else{
+            setUserList([]);
+          }
+          
           
           setVehicleDetails({"vehicleModel":res.data.result.model,"vehicleNumber":res.data.result.number});
 console.log(vehicleDetails);
@@ -160,6 +164,22 @@ console.log(vehicleDetails);
     //   />
     // ));
   };
+  const deleteUser = (cmdid)=>{
+    const deleterequestdata = {
+      "type" : "SP_CALL",
+    "requestId" : 1900002,
+       request: {
+    "cmdId" : cmdid
+      }
+    }
+    
+    axios.post(ServiceURL,deleterequestdata).then((res) => {
+      console.log(res);   
+      displayComplaints();
+        }).catch(() => {
+            console.log('No internet connection found. App is running in offline mode.');
+          });
+             }
 
 
   const handleSelectAllClick = (event) => {
@@ -252,7 +272,7 @@ console.log(vehicleDetails);
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                    
-                    const { cdId, complaint, problem, image, status, company, avatarUrl, isVerified } = row;
+                    const { cmdId, complaint, problem, image, status, company, avatarUrl, isVerified } = row;
                   //  const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -287,7 +307,7 @@ console.log(vehicleDetails);
                         </TableCell>
 
                         <TableCell align="right"  >
-                          <UserMoreMenu />
+                          <UserMoreMenu  callback={()=>{deleteUser(cmdId)}} editUser={(e)=>{}}/>
                         </TableCell>
                       </TableRow>
                     );

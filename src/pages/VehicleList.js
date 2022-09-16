@@ -100,9 +100,7 @@ export default function CustomerDetails() {
   }
 
 
-    
-      
-  useEffect(() => {
+  function display(){
     console.log(data.state);
     axios.post(ServiceURL,requestdata).then((res) => {
       
@@ -118,6 +116,11 @@ export default function CustomerDetails() {
     }).catch(() => {
         console.log('No internet connection found. App is running in offline mode.');
       });
+  }
+    
+      
+  useEffect(() => {
+   display();
   }, [])
 
   const [open, setOpen] = useState(true);
@@ -148,8 +151,14 @@ export default function CustomerDetails() {
     const add = (data) => {
       console.log(data);
       setDialog();
-      localStorage.setItem('vId', data.vId);
+
+
+      if(!upd){
+        localStorage.setItem('vId', data.vId);
       navigate('/dashboard/vehicledetails');
+      }
+
+      display();
     };
     setDialog(() => (
       <FullScreenDialog
@@ -163,6 +172,22 @@ export default function CustomerDetails() {
     ));
   };
 
+  const deleteUser = (vId)=>{
+    const deleterequestdata = {
+      "type" : "SP_CALL",
+    "requestId" : 1700002,
+       request: {
+    "vId" : vId
+      }
+    }
+    
+    axios.post(ServiceURL,deleterequestdata).then((res) => {
+      console.log(res);   
+      display();
+        }).catch(() => {
+            console.log('No internet connection found. App is running in offline mode.');
+          });
+             }
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -264,7 +289,7 @@ export default function CustomerDetails() {
                           </Label>
                         </TableCell>
                         <TableCell align="right"  >
-                          <UserMoreMenu  />
+                          <UserMoreMenu  callback={()=>{deleteUser(vId)}} editUser={(e)=>handleAdd(e,true,'EDIT',row)}/>
                         </TableCell>
                       </TableRow>
                     );
