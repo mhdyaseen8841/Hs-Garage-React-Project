@@ -30,7 +30,7 @@ import Camera from '../../utils/Camera';
 export default function AddComplaint(details) {
   const [update, setUpdate] = useState(details.updated);
   const [imagedata, setImageData] = useState('');
-  const [complaints,setComplaints]=useState('')
+  const [complaints,setComplaints]=useState([])
 
   const validSchema = Yup.object().shape({
     Complaint: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Complaint is required'),
@@ -67,8 +67,7 @@ export default function AddComplaint(details) {
     console.log("hloooooooooooooooooo");
    console.log(imagedata);
     setComplaints([...complaints, {
-      id: Date.now(),
-      complaints: values.Complaint,
+      complaint: values.Complaint,
       problem: values.Problem,
       image: !imagedata ? '' :imagedata
    }]);
@@ -83,13 +82,14 @@ console.log(complaints);
   const onAdd = () => {
     console.log("hlooooooooooooooooooo");
     console.log(localStorage.getItem('vId'));
+
     setComplaints([...complaints, {
-      id: Date.now(),
-      complaints: values.Complaint,
+      complaint: values.Complaint,
       problem: values.Problem,
       image: !imagedata ? '' :imagedata
    }]);
    
+   console.log(complaints);
     const requestdata = 
     {
       "type" : "SP_CALL",
@@ -99,7 +99,7 @@ console.log(complaints);
  "complaints" : complaints
       }
 }
-
+console.log(requestdata);
       
       axios.post(ServiceURL,requestdata).then((res) => {
         
@@ -116,7 +116,7 @@ console.log(complaints);
 // }
 setAlert();
 console.log(res.data);
-  details.submit(res.data.result);
+  details.submit(res.data);
 
       }).catch(() => {
           console.log('No internet connection found. App is running in offline mode.');
@@ -201,7 +201,7 @@ console.log(res.data);
         
             <TableRow>
               <TableCell component="th" scope="row">
-                {row.complaints}
+                {row.complaint}
               </TableCell>
               <TableCell align="right">{row.problem}</TableCell>
               <TableCell align="right">Image</TableCell>

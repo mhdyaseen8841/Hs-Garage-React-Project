@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Compressor from 'compressorjs';
+
 const Camera = (getProps) => {
     const inputRef = useRef(null);
     const [imgPreview, setImgPreview] = useState();
@@ -75,7 +76,7 @@ const Camera = (getProps) => {
     };
     return (
         <div sx={{ display: { xs: 'none', md: 'block' }}}>
-            <i className="large material-icons" sx={{cursor: 'pointer'}} onClick={handleClick}><CameraAltIcon/></i>
+            <i className="large material-icons" sx={{cursor: 'pointer'}} onClick={handleClick}  onKeyDown={handleClick}><CameraAltIcon/></i>
             <input
                 style={{ display: 'none' }}
                 ref={inputRef}

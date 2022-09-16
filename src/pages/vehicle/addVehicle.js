@@ -31,10 +31,10 @@ export default function FullScreenDialog(details) {
   const [alertMsg, setAlert] = useState();
   const formik = useFormik({
     initialValues: {
-      VehicleNum: update ? details.data.VehicleNum : '',
-      VehicleCompany: update ? details.data.VehicleCompany : '',
-      ModelName: update ? details.data.ModelName : '',
-      Year: update ? details.data.Year : '',
+      VehicleNum: update ? details.data.number : '',
+      VehicleCompany: update ? details.data.Company : '',
+      ModelName: update ? details.data.model : '',
+      Year: update ? details.data.year : '',
     },
     validationSchema: validSchema,
     onSubmit: (values, actions) => {
@@ -59,13 +59,14 @@ export default function FullScreenDialog(details) {
     {
       
         "type" : "SP_CALL",
-     "requestId" : 1700001,
+     "requestId" : update ? 1700003 : 1700001,
          request: {
           "cId" : localStorage.getItem('cId'),
  "company" : values.VehicleCompany,
  "vNumber" : values.VehicleNum,
  "vModel" : values.ModelName,
- "vYear" : values.Year
+ "vYear" : values.Year,
+ "vId" : update ? details.data.vId : 0
         }
   
  

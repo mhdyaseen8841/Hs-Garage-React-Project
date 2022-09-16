@@ -18,6 +18,7 @@ import ServiceURL from '../../constants/url';
 
 
 export default function FullScreenDialog(details) {
+  console.log(details.data);
   const [update, setUpdate] = useState(details.updated);
   const validSchema = Yup.object().shape({
     CustomerName: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Name is required'),
@@ -29,10 +30,10 @@ export default function FullScreenDialog(details) {
   const [alertMsg, setAlert] = useState();
   const formik = useFormik({
     initialValues: {
-      CustomerName: update ? details.data.CustomerName : '',
-      Mobnum: update ? details.data.Mobnum : '',
-      Email: update ? details.data.Email : '',
-      Address: update ? details.data.Address : '',
+      CustomerName: update ? details.data.name :'',
+      Mobnum: update ? details.data.mobile : '',
+      Email: update ? details.data.email : '',
+      Address: update ? details.data.address : '',
     },
     validationSchema: validSchema,
     onSubmit: (values, actions) => {
@@ -56,28 +57,36 @@ export default function FullScreenDialog(details) {
 
   const onAdd = () => {
     console.log(values);
+   console.log(update);
     const requestdata = 
     {
       "type":"SP_CALL",
-      "requestId":1600001,
+      "requestId": update ? 1600003 : 1600001 ,
       "request":{
         "name":values.CustomerName,
         "mobile" : values.Mobnum,
     "email" : values.Email,
-        "place" :values.Address
-
+        "place" :values.Address,
+  "id" : update ? details.data.cId : 0
       }
     }
+
+    console.log(requestdata);
       
       axios.post(ServiceURL,requestdata).then((res) => {
         if(res.data.errorCode===1)
 {
-  console.log(res);
+  
   setAlert();
-  details.submit(res.data.result);
+  if(update){
+    details.submit('') 
+  }else
+  {
+    details.submit(res.data.result);
+  }
+ 
 }       else{
-  console.log(res)
-  console.log(res.data.errorMsg);
+ 
   setAlert(res.data.errorMsg);
 }
       }).catch(() => {

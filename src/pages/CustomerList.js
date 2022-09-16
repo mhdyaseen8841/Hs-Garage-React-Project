@@ -98,6 +98,7 @@ export default function Customer() {
       const display =()=>{
         requestPost(requestdata).then((res) => {
        if(res.data.errorCode === 0){
+        console.log(res.data.result);
           console.log(res.data);
           setUserList(res.data.result);
        }
@@ -143,12 +144,12 @@ export default function Customer() {
     setSelected([]);
   };
 
-  const deleteUser = ()=>{
+  const deleteUser = (cid)=>{
     const deleterequestdata = {
       "type" : "SP_CALL",
     "requestId" : 1600004,
        request: {
-    "id" : "cId"
+    "id" : cid
       }
     }
     
@@ -159,19 +160,26 @@ export default function Customer() {
             console.log('No internet connection found. App is running in offline mode.');
           });
              }
-             const editUser = ()=>{
 
-             }
+
+         
+    
+
+             
 
 
 
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
     setOpen(true);
+    console.log(data)
     const add = (data) => {
-      console.log(data);
       setDialog();
-      localStorage.setItem('cId', data.cId);
-      navigate('/dashboard/customerdetails');
+      if(!upd){
+        localStorage.setItem('cId', data.cId);
+        navigate('/dashboard/customerdetails');
+      }
+        display();
+      
     };
     setDialog(() => (
       <FullScreenDialog
@@ -271,7 +279,7 @@ export default function Customer() {
                         </TableCell> */}
 
                         <TableCell align="right"  >
-                          <UserMoreMenu callback={deleteUser} editUser={handleAdd}/>
+                          <UserMoreMenu callback={()=>{deleteUser(cId)}} editUser={(e)=>handleAdd(e,true,'EDIT',row)}/>
                         </TableCell>
                       </TableRow>
                     );
