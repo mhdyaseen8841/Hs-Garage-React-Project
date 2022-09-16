@@ -70,6 +70,18 @@ export default function LoginForm() {
         }
         
       }).catch(() => {
+        setTimeout(() => {
+          // alert(res.data.msg);
+          actions.setSubmitting(false);
+          setAlert(
+            <>
+              <Alert variant="filled" severity="error">
+              internet connection Error or Server error
+              </Alert>
+              <br />
+            </>
+          );
+        }, 1000);
           console.log('No internet connection found. App is running in offline mode.');
         });
     

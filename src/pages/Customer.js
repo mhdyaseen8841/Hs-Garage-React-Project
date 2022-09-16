@@ -221,7 +221,7 @@ export default function Customer() {
 
   return (
     <Page title="User">
-      <Container>
+      <Container maxWidth="xl">
       {addDialog}
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
