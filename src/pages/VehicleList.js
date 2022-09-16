@@ -30,6 +30,8 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 import FullScreenDialog from './vehicle/addVehicle';
+import CustomizedDialogs from '../utils/AlertDialogue';
+
 // mock
 // import USERLIST from '../_mock/user';
 import ServiceURL from '../constants/url';
@@ -173,6 +175,14 @@ export default function CustomerDetails() {
   };
 
   const deleteUser = (vId)=>{
+console.log("---------------sdfffffffff");
+console.log(USERLIST.length);
+    if(USERLIST.length===1){
+      setDialog(() => (
+        <CustomizedDialogs  onClose={handleClose}  name="vehicle"/>
+      ))
+    }else{
+    
     const deleterequestdata = {
       "type" : "SP_CALL",
     "requestId" : 1700002,
@@ -188,6 +198,8 @@ export default function CustomerDetails() {
             console.log('No internet connection found. App is running in offline mode.');
           });
              }
+
+            }
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {

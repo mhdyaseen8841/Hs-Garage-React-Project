@@ -100,7 +100,10 @@ export default function Customer() {
        if(res.data.errorCode === 0){
         console.log(res.data.result);
           console.log(res.data);
+
           setUserList(res.data.result);
+          console.log("hloooooooooooooooooooooooooooooooooooo");
+       
        }
        else{
         setUserList([]);
@@ -170,6 +173,7 @@ export default function Customer() {
 
 
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
+   
     setOpen(true);
     console.log(data)
     const add = (data) => {
@@ -182,6 +186,7 @@ export default function Customer() {
       
     };
     setDialog(() => (
+      
       <FullScreenDialog
         onClose={handleClose}
         open={open}
