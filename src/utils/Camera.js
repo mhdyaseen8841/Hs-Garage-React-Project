@@ -76,7 +76,7 @@ const Camera = (getProps) => {
     };
     return (
         <div sx={{ display: { xs: 'none', md: 'block' }}}>
-            <i className="large material-icons" sx={{cursor: 'pointer'}} onClick={handleClick}  onKeyDown={handleClick}><CameraAltIcon/></i>
+            <CameraAltIcon sx={{cursor: 'pointer'}} tabIndex={-42} onClick={handleClick}/>
             <input
                 style={{ display: 'none' }}
                 ref={inputRef}
@@ -89,7 +89,7 @@ const Camera = (getProps) => {
                 style={{width: 300, height: 'auto', objectFit: 'fill' }}
                 id="blah"
                 src={imgPreview}
-                alt="your image"
+                alt=""
             />
             </div> }
         </div>
