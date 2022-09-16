@@ -102,8 +102,7 @@ export default function Customer() {
           console.log(res.data);
 
           setUserList(res.data.result);
-          console.log("hloooooooooooooooooooooooooooooooooooo");
-       
+          
        }
        else{
         setUserList([]);
@@ -264,6 +263,7 @@ export default function Customer() {
                   {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { cId, id, name, role, mobile, address } = row;
                     const title=name;
+                    console.log( USERLIST.length)
                   //  const isItemSelected = selected.indexOf(name) !== -1;
                     return (
                       <TableRow>                      

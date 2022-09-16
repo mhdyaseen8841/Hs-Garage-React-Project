@@ -249,7 +249,7 @@ console.log(USERLIST.length);
 
   return (
     <Page title="User">
-      <Container>
+      <Container maxWidth="xl">
       {addDialog}
       <KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={()=>{navigate(-1)}} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
