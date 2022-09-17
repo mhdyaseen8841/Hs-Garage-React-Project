@@ -4,7 +4,11 @@ import Iconify from '../../components/Iconify';
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
-const user = 'staff'
+let user = '';
+if(localStorage.getItem('userType') !== null){
+ user = localStorage.getItem('userType');
+}
+console.log(user);
 const navConfig = []
 if(user === 'admin'){
   navConfig.push({

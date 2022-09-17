@@ -40,9 +40,9 @@ export default function LoginForm() {
       const requestOptions = {
         "type" : "Authetication",
            "request": {
-        "username" : getFieldProps('user').value,
-             "password" : getFieldProps('password').value
-              }
+           "username" : getFieldProps('user').value,
+           "password" : getFieldProps('password').value
+          }
         }
         
 
@@ -51,6 +51,7 @@ export default function LoginForm() {
         if(res.data.errorCode===1){
           localStorage.setItem('loginId', res.data.result.aid);
           localStorage.setItem('name', res.data.result.name);
+          localStorage.setItem('userType',res.data.result.userType);
           navigate('/dashboard/app', { replace: true });
         }
     
