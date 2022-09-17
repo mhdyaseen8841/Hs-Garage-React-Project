@@ -1,6 +1,10 @@
 import React, { useRef, useState } from "react";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Compressor from 'compressorjs';
+import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { Stack } from "@mui/material";
+import { flexbox } from "@mui/system";
 
 const Camera = (getProps) => {
     const inputRef = useRef(null);
@@ -50,10 +54,7 @@ const Camera = (getProps) => {
                     console.log(localStorage.getItem('vId'));
                     console.log(result);
                     getProps.callback(result)
-                  
-                   
-
-
+                    setImgPreview();
 
                     // setImageDetails([
                     //   {
@@ -75,8 +76,9 @@ const Camera = (getProps) => {
         // console.log('fileObj is', fileObj);
     };
     return (
-        <div sx={{ display: { xs: 'none', md: 'block' }}}>
-            <CameraAltIcon sx={{cursor: 'pointer'}} tabIndex={-42} onClick={handleClick}/>
+      // <Stack sx={{ display: { xs: 'flex', md: 'none' }}} direction="row"> // for mobileview
+        <Stack direction="row" >
+            <CameraAltIcon sx={{cursor: 'pointer'}} onClick={handleClick}/>
             <input
                 style={{ display: 'none' }}
                 ref={inputRef}
@@ -84,15 +86,10 @@ const Camera = (getProps) => {
                 accept="images/*"
                 capture="user"
                 onChange={handleFileChange}
-            /><br/>
-            {imgPreview && <div style={{position: "relative",justifyContent:"center",alignItems:"center"}}> <img
-                style={{width: 300, height: 'auto', objectFit: 'fill' }}
-                id="blah"
-                src={imgPreview}
-                alt=""
             />
-            </div> }
-        </div>
+            {getProps.status ? <CheckCircleSharpIcon style={{ color: "green" }}/>  : <CancelIcon style={{ color: "red" }} />}
+            
+        </Stack>
     );
 }
 

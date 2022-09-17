@@ -31,6 +31,7 @@ export default function AddComplaint(details) {
   const [update, setUpdate] = useState(details.updated);
   const [imagedata, setImageData] = useState('');
   const [complaints,setComplaints]=useState([])
+  const [imgstatus, setImgStatus] = useState(false)
 
   const validSchema = Yup.object().shape({
     Complaint: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Complaint is required'),
@@ -42,30 +43,20 @@ export default function AddComplaint(details) {
   const formik = useFormik({
     initialValues: {
       Complaint: update ? details.data.Complaint : '',
-      Problem: update ? details.data.Problem : '',
-      
+      Problem: update ? details.data.Problem : ''
     },
     validationSchema: validSchema,
-    onSubmit: (values, actions) => {
-     
+    onSubmit: (values, actions,{resetForm}) => {
       onAdd();
     }
   });
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-  // useEffect(() => {
-  //   axios.get(`${ServiceURL}getType.php`).then((res) => {
-  //     setTypeData(res.data);
-  //     console.log(type);
-  //   });
-  //   axios.get(`${ServiceURL}getColor.php`).then((res) => {
-  //     setcolour(res.data);
-  //   });
-  //   console.log(details.updated);
-  // }, []);
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
+
 
   const handleAddNew = ()=>{
     console.log("hloooooooooooooooooo");
    console.log(imagedata);
+   setImgStatus(false);
     setComplaints([...complaints, {
       complaint: values.Complaint,
       problem: values.Problem,
@@ -127,6 +118,7 @@ console.log(res.data);
 
   const handleCallback = (imgData) => {
     setImageData(imgData);
+    setImgStatus(true);
   };
   const alertTimeOut = () => {
     setTimeout(() => {
@@ -138,7 +130,7 @@ console.log(res.data);
     details.onClose();
   };
   return (
-    <div>
+    <Container >
       <Dialog fullScreen open={details.open} onClose={details.onClose}>
         <AppBar sx={{ position: 'relative' }}>
           <Toolbar>
@@ -153,14 +145,10 @@ console.log(res.data);
             </Button>
           </Toolbar>
         </AppBar>
-        
-        <Container>
+        <Container >
         <Typography variant="h4">COMPLAINT DETAILS</Typography>
-          <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ my: 3 }}>
-
-            
+          <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ my: 5 }}>
             <TextField
-           
               fullWidth
               type="text"
               label="Complaint"
@@ -181,37 +169,38 @@ console.log(res.data);
               error={Boolean(touched.CustomerName && errors.CustomerName)}
               helperText={touched.CustomerName && errors.CustomerName}
             />
-           
-           <Camera   callback={handleCallback} /> 
-           <Button onClick={handleAddNew} variant="text">Add New +</Button>
+           <Stack direction="row" alignItems="center">
+              <Camera callback={handleCallback} status={imgstatus} /> 
+              <Button style={{width:'50px'}} onClick={()=>{setFieldValue('Complaint', ''); setFieldValue('Problem', ''); handleAddNew()}} variant="outlined">ADD NEW</Button>
+           </Stack>
           </Stack>
         </Container>
-        <TableContainer component={Paper}>
+      <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
+        <TableHead >
           <TableRow>
             <TableCell>Complaint</TableCell>
-            <TableCell align="right">Problem</TableCell>
-            <TableCell align="right">Image</TableCell>
-           
+            <TableCell>Problem</TableCell>
+            <TableCell>Image</TableCell>
+            <TableCell/>
           </TableRow>
         </TableHead>
         <TableBody>
-          { complaints && complaints.map((row) => (
-        
+          {complaints.map((row) => (
             <TableRow>
               <TableCell component="th" scope="row">
                 {row.complaint}
               </TableCell>
-              <TableCell align="right">{row.problem}</TableCell>
-              <TableCell align="right">Image</TableCell>
+              <TableCell >{row.problem}</TableCell>
+              <TableCell ><img src={`${row.image}`} style={{width: 100, height: 100, objectFit: 'contain'}} alt="no data" /></TableCell>
+              <TableCell/>
             </TableRow>
           )
-)}
+        )}
         </TableBody>
       </Table>
     </TableContainer>
       </Dialog>
-    </div>
+  </Container>
   );
 }

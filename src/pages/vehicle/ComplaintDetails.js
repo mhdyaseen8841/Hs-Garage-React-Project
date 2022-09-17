@@ -6,7 +6,6 @@ import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 
 
 
-
 // material
 import {
   Card,
@@ -21,8 +20,11 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  Dialog,
+  styled
 } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import { Close }from '@mui/icons-material';
 // components
 import Page from '../../components/Page';
 import Label from '../../components/Label';
@@ -44,6 +46,13 @@ const TABLE_HEAD = [
   { id: 'Image', label: 'Image', alignRight: false },
   { id: '' },
 ];
+
+const ImageStyle = styled('img')(({ theme }) => ({
+  width: '100%',
+  maxWidth: 464,
+  display: 'flex',
+  justifyContent: 'center'
+}));
 
 // ----------------------------------------------------------------------
 
@@ -87,6 +96,8 @@ export default function ComplaintDetails(props) {
     setDialog();
   };
 
+  const [view, setView] = useState(false);
+  const [imgPop, setimgPop] = useState();
   const [open, setOpen] = useState(true);
 const [user,username] = useState("username");
   const [addDialog, setDialog] = useState();
@@ -225,10 +236,34 @@ console.log(vehicleDetails);
 
   const isUserNotFound = filteredUsers.length === 0;
 
+ const viewHandleClose = () =>{
+   setView(false);
+ }
+
+  const imagepop  = (imgsrc)=> {
+    setimgPop(imgsrc)
+    setView(true)
+  }
+
 
 
   return (
     <Page title="Complaint Details">
+      <Dialog open={view}>
+          <ImageStyle src={imgPop} alt="" />
+          <Close
+            style={{
+              position: 'absolute',
+              top: 2,
+              right: 2,
+              cursor: 'pointer',
+              backgroundColor: '#333',
+              color: '#fff',
+              borderRadius: '100%'
+            }}
+            onClick={viewHandleClose}
+          />
+        </Dialog>
       <Container maxWidth="xl">
       {addDialog}
       <KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={()=>{navigate(-1)}} />
@@ -290,12 +325,16 @@ console.log(vehicleDetails);
                         <TableCell align="left">
                     
 
-         { image ? <img
-          style={{width: 300, height: 'auto', objectFit: 'fill' }}
-          id="blah"
+         { image ? 
+         <img
+          onClick = {()=>{imagepop(image)}}
+          style={{width: 150, height: 150, objectFit: 'contain' ,cursor: "pointer"  }}
           src={`${image}`}
+          role="presentation"
           alt="no network"
-      /> :  <Typography variant="subtitle2" sx={{cursor: "pointer"}}
+        />
+       :  
+       <Typography variant="subtitle2" sx={{cursor: "pointer"}}
      >
         No Image
       </Typography>

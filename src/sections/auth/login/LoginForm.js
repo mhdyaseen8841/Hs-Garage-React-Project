@@ -52,6 +52,7 @@ export default function LoginForm() {
           localStorage.setItem('loginId', res.data.result.aid);
           localStorage.setItem('name', res.data.result.name);
           localStorage.setItem('userType',res.data.result.userType);
+          localStorage.setItem('mobile',res.data.result.mobile);
           navigate('/dashboard/app', { replace: true });
         }
     

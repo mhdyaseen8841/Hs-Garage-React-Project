@@ -5,7 +5,7 @@ import Iconify from '../../components/Iconify';
 
 const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
 let user = '';
-if(localStorage.getItem('userType') !== null){
+if(localStorage.getItem('userType') != null){
  user = localStorage.getItem('userType');
 }
 console.log(user);
