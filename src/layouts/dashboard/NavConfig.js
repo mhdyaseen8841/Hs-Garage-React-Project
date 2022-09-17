@@ -4,9 +4,10 @@ import Iconify from '../../components/Iconify';
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
-
-const navConfig = [
-  {
+const user = 'staff'
+const navConfig = []
+if(user === 'admin'){
+  navConfig.push({
     title: 'dashboard',
     path: '/dashboard/app',
     icon: getIcon('eva:pie-chart-2-fill'),
@@ -17,30 +18,49 @@ const navConfig = [
     icon: getIcon('eva:people-fill'),
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon('eva:shopping-bag-fill'),
+    title: 'bill',
+    path: '/dashboard/bill',
+    icon: getIcon('icon-park-solid:bill'),
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
-    icon: getIcon('eva:file-text-fill'),
+    title: 'users',
+    path: '/dashboard/user',
+    icon: getIcon('carbon:user-filled')}
+    )
+}
+else if(user === 'staff'){
+  navConfig.push({
+    title: 'dashboard',
+    path: '/dashboard/app',
+    icon: getIcon('eva:pie-chart-2-fill'),
   },
   {
-    title: 'login',
-    path: '/login',
-    icon: getIcon('eva:lock-fill'),
+    title: 'customer',
+    path: '/dashboard/customer',
+    icon: getIcon('eva:people-fill'),
+  })
+}
+else{
+  navConfig.push({
+    title: 'dashboard',
+    path: '/dashboard/app',
+    icon: getIcon('eva:pie-chart-2-fill'),
   },
   {
-    title: 'register',
-    path: '/register',
-    icon: getIcon('eva:person-add-fill'),
+    title: 'customer',
+    path: '/dashboard/customer',
+    icon: getIcon('eva:people-fill'),
   },
   {
-    title: 'Not found',
-    path: '/404',
-    icon: getIcon('eva:alert-triangle-fill'),
+    title: 'bill',
+    path: '/dashboard/bill',
+    icon: getIcon('icon-park-solid:bill'),
   },
-];
+  {
+    title: 'users',
+    path: '/dashboard/user',
+    icon: getIcon('carbon:user-filled')}
+    )
+}
 
 export default navConfig;

@@ -1,6 +1,6 @@
 import { filter } from 'lodash';
 import { useState, useEffect } from 'react';
-import { faker } from '@faker-js/faker';
+import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 // @muii
 import { useTheme } from '@mui/material/styles';
@@ -85,10 +85,10 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map((el) => el[0]);
 }
-
-
 export default function DashboardApp() {
   const theme = useTheme();
+  
+  const navigate = useNavigate()
 
   const [USERLIST, setUserList] = useState([]);
 
@@ -128,11 +128,13 @@ export default function DashboardApp() {
         console.log(res.data.result)
         const label = []
         const cdata = []
+        if(res.data.result.chart[0] != null){
         res.data.result.chart.map((data) => {
           label.push(data.date)
           cdata.push(data.amount)
           return data;
         })
+       }
         setUserList(res.data.result.tableData);
         setChartData(cdata);
         setChartLable(label)
@@ -265,13 +267,17 @@ export default function DashboardApp() {
                     />
                     <TableBody>
                       {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                        const { name, mobile, address, vnumber, vdate ,status } = row;
+                        const { name, mobile, address, vnumber, vdate ,status, cmId } = row;
                         // const title = name;
                         //  const isItemSelected = selected.indexOf(name) !== -1;
                         return (
                           <TableRow>
-                            <TableCell component="th" scope="row" >
-                              <Typography variant="h6" sx={{ cursor: "pointer" }} >
+                            <TableCell component="th" scope="row" onClick={()=>{
+                              localStorage.setItem('cmId', cmId);
+                              console.log(cmId)
+                             navigate('/dashboard/complaintDetails')
+                            }}>
+                              <Typography variant="h6" sx={{ cursor: "pointer" }}  >
                                 {vnumber}
                               </Typography>
                             </TableCell>

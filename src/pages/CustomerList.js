@@ -101,12 +101,13 @@ export default function Customer() {
         console.log(res.data.result);
           console.log(res.data);
           setUserList(res.data.result);
-          
        }
        else{
+        console.log(res.data);
         setUserList([]);
        }
-        }).catch(() => {
+        }).catch((error) => {
+          console.log(error);
             console.log('No internet connection found. App is running in offline mode.');
           });
       }
@@ -128,7 +129,7 @@ export default function Customer() {
 
   const [filterName, setFilterName] = useState('');
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -229,7 +230,7 @@ export default function Customer() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="User">
+    <Page title="Customer">
       <Container maxWidth="xl">
       {addDialog}
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>

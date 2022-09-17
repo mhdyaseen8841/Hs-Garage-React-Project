@@ -102,7 +102,7 @@ const [user,username] = useState("username");
 
   const [filterName, setFilterName] = useState('');
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [USERLIST,setUserList] = useState([]);
   const requestdata = 
@@ -221,7 +221,7 @@ displayComplaints()
 
 
   return (
-    <Page title="User">
+    <Page title="Complaints">
       <Container maxWidth="xl">
       {addDialog}
       <KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={()=>{navigate(-1)}} />

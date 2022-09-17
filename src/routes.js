@@ -26,7 +26,6 @@ export default function Router() {
       children: [
         { path: '/', element: <Navigate to="/dashboard/app" /> },
         { path: 'login', element: <Login /> },
-        { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],
@@ -37,8 +36,6 @@ export default function Router() {
       children: [
         { path: 'app', element: <DashboardApp /> },
         { path: 'customer', element: <Customer /> },
-        { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> },
         {path:'customerdetails', element: <CustomerDetails/> },
         {path:'VehicleDetails', element: <VehicleDetails/> },
         {path:'complaintDetails', element: <ComplaintDetails/> },

@@ -101,7 +101,7 @@ const [user,username] = useState("username");
 
   const [filterName, setFilterName] = useState('');
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [USERLIST,setUserList] = useState([]);
 
@@ -228,7 +228,7 @@ console.log(vehicleDetails);
 
 
   return (
-    <Page title="User">
+    <Page title="Complaint Details">
       <Container maxWidth="xl">
       {addDialog}
       <KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={()=>{navigate(-1)}} />
@@ -280,10 +280,7 @@ console.log(vehicleDetails);
                       
                         <TableCell component="th" scope="row">
                             {/* <Avatar alt={name} src={avatarUrl} /> */}
-                            <Typography variant="subtitle2" sx={{cursor: "pointer"}}
-                            onClick={()=>{
-                              
-                           }}>
+                            <Typography variant="subtitle2" >
                               {complaint}
                             </Typography>
                         </TableCell>

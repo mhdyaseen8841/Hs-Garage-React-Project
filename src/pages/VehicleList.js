@@ -4,8 +4,6 @@ import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 
-
-
 // material
 import {
   Card,
@@ -113,7 +111,8 @@ export default function CustomerDetails() {
     setUserList([]);
   }
     
-    }).catch(() => {
+    }).catch((error) => {
+      console.log(error);
         console.log('No internet connection found. App is running in offline mode.');
       });
   }
@@ -137,7 +136,7 @@ export default function CustomerDetails() {
 
   const [filterName, setFilterName] = useState('');
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -236,7 +235,7 @@ export default function CustomerDetails() {
 
 
   return (
-    <Page title="User">
+    <Page title="Vehicles">
       <Container maxWidth="xl">
       {addDialog}
       <KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={()=>{navigate(-1)}} />
