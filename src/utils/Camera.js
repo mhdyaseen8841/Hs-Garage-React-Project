@@ -43,11 +43,9 @@ const Camera = (getProps) => {
             return;
         }
         setImgPreview(URL.createObjectURL(event.target.files[0]))
-
         new Compressor(event.target.files[0], {      
-            quality: 0.4,
+            quality: 0.1,
             success: (compressedResult) => {
-
                 console.log(compressedResult);
                 getBase64(compressedResult).then((result) => {
                     setimgbase64(result);
@@ -88,7 +86,6 @@ const Camera = (getProps) => {
                 onChange={handleFileChange}
             />
             {getProps.status ? <CheckCircleSharpIcon style={{ color: "green" }}/>  : <CancelIcon style={{ color: "red" }} />}
-            
         </Stack>
     );
 }

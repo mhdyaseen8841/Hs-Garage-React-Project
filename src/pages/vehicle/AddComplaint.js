@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import { Stack, Container, Typography, TextField, Checkbox, Alert } from '@mui/material';
+import { Stack, Container, Typography, TextField, Checkbox, Alert, ownerDocument } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Radio from '@mui/material/Radio';
@@ -35,8 +35,7 @@ export default function AddComplaint(details) {
 
   const validSchema = Yup.object().shape({
     Complaint: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Complaint is required'),
-    Problem: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Problem is required'),
-  
+    Problem: Yup.string().matches(/^\S/, 'Whitespace is not allowed'),
   });
 
   const [alertMsg, setAlert] = useState();
@@ -46,8 +45,10 @@ export default function AddComplaint(details) {
       Problem: update ? details.data.Problem : ''
     },
     validationSchema: validSchema,
-    onSubmit: (values, actions,{resetForm}) => {
-      onAdd();
+    onSubmit: (values, actions) => {
+      console.log("submited")
+      handleAddNew();
+      
     }
   });
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;
@@ -86,8 +87,9 @@ console.log(complaints);
       "type" : "SP_CALL",
    "requestId" : 1800001,
        "request": {
+        "uId" : localStorage.getItem('loginId'),
         "vId" : localStorage.getItem('vId'),
- "complaints" : complaints
+        "complaints" : complaints
       }
 }
 console.log(requestdata);
@@ -108,12 +110,9 @@ console.log(requestdata);
 setAlert();
 console.log(res.data);
   details.submit(res.data);
-
       }).catch(() => {
           console.log('No internet connection found. App is running in offline mode.');
         });
-    
-   
   };
 
   const handleCallback = (imgData) => {
@@ -140,8 +139,8 @@ console.log(res.data);
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Add New Complaint
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleSubmit}>
-              {details.button}
+            <Button autoFocus color="inherit" onClick={()=>{onAdd();}}>
+              {details.button} COMPLAINT
             </Button>
           </Toolbar>
         </AppBar>
@@ -155,23 +154,22 @@ console.log(res.data);
               variant="outlined"
               value={details.update ? details.data.name : ''}
               {...getFieldProps('Complaint')}
-              error={Boolean(touched.Mobnum && errors.Mobnum || alertMsg)}
-              helperText={touched.Mobnum && errors.Mobnum || alertMsg}
+              error={Boolean(touched.Complaint && errors.Complaint)}
+              helperText={touched.Complaint && errors.Complaint}
             />
             {}
             <TextField
-
               fullWidth
               type="text"
               label="Problem"
               variant="outlined"
               {...getFieldProps('Problem')}
-              error={Boolean(touched.CustomerName && errors.CustomerName)}
-              helperText={touched.CustomerName && errors.CustomerName}
+              error={Boolean(touched.Problem && errors.Problem)}
+              helperText={touched.Problem && errors.Problem}
             />
            <Stack direction="row" alignItems="center">
               <Camera callback={handleCallback} status={imgstatus} /> 
-              <Button style={{width:'50px'}} onClick={()=>{setFieldValue('Complaint', ''); setFieldValue('Problem', ''); handleAddNew()}} variant="outlined">ADD NEW</Button>
+              <Button style={{width:'50px'}} onClick={()=>{handleSubmit()}} variant="outlined">ADD NEW</Button>
            </Stack>
           </Stack>
         </Container>
@@ -192,7 +190,7 @@ console.log(res.data);
                 {row.complaint}
               </TableCell>
               <TableCell >{row.problem}</TableCell>
-              <TableCell ><img src={`${row.image}`} style={{width: 100, height: 100, objectFit: 'contain'}} alt="no data" /></TableCell>
+              <TableCell >{row.image ? <img src={`${row.image}`} style={{width: 100, height: 100, objectFit: 'contain'}} alt="no data" /> : 'no image'}</TableCell>
               <TableCell/>
             </TableRow>
           )

@@ -49,6 +49,7 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'mobile', label: 'Mobile', alignRight: false },
   { id: 'address', label: 'Address', alignRight: false },
+  { id : 'staff',label: 'staff', alignRight: false },
   { id: 'visitDate', label: 'visit Date', alignRight: false },
   { id: 'status', label: 'status', alignRight: false },
   { id: '' },
@@ -135,7 +136,12 @@ export default function DashboardApp() {
           return data;
         })
        }
+       if(res.data.result.tableData[0] != null){
         setUserList(res.data.result.tableData);
+       }
+       else{
+        setUserList([])
+       }
         setChartData(cdata);
         setChartLable(label)
         console.log(USERLIST);
@@ -267,7 +273,7 @@ export default function DashboardApp() {
                     />
                     <TableBody>
                       {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                        const { name, mobile, address, vnumber, vdate ,status, cmId } = row;
+                        const { username,name, mobile, address, vnumber, vdate ,status, cmId } = row;
                         // const title = name;
                         //  const isItemSelected = selected.indexOf(name) !== -1;
                         return (
@@ -284,6 +290,7 @@ export default function DashboardApp() {
                             <TableCell align="left">{name}</TableCell>
                             <TableCell align="left">{mobile}</TableCell>
                             <TableCell align="left">{address}</TableCell>
+                            <TableCell align="left">{username}</TableCell>
                             <TableCell align="left">{vdate}</TableCell>
                             <TableCell align="left">
                           <Label variant="ghost" color={status === 0 ? 'error' : 'success'}>
