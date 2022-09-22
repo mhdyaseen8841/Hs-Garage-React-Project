@@ -1,0 +1,7 @@
+{
+    "name": "HS GARAGE",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "react"
+  }
