@@ -17,6 +17,7 @@ import AddComplaint from './pages/vehicle/AddComplaint';
 import ComplaintDetails from './pages/vehicle/ComplaintDetails';
 import Profile from './pages/profile';
 import Settings from './pages/settings';
+import User from './pages/userList';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -43,6 +44,8 @@ export default function Router() {
         { path: 'settings', element: <Settings /> },
         {path:'VehicleDetails', element: <VehicleDetails/> },
         {path:'complaintDetails', element: <ComplaintDetails/> },
+        {path:'users', element: <User /> },
+        
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> }
       ],

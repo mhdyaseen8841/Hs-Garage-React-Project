@@ -127,9 +127,9 @@ export default function FullScreenDialog(details) {
             <Typography variant="h4">CUSTOMER DETAILS</Typography>
             
             <TextField
-           
+
               fullWidth
-              type="text"
+              type="number"
               label="Mobile Number"
               variant="outlined"
               value={details.update ? details.data.name : ''}

@@ -44,8 +44,6 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'mobile', label: 'Mobile', alignRight: false },
   { id: 'address', label: 'Address', alignRight: false },
-  
-  { id: 'status', label: 'lastVisit', alignRight: false },
   { id: '' },
 ];
 
@@ -275,12 +273,6 @@ export default function Customer() {
                         </TableCell>
                         <TableCell align="left">{mobile}</TableCell>
                         <TableCell align="left">{address}</TableCell>
-                        {/* <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell> */}
-
                         <TableCell align="right"  >
                           <UserMoreMenu callback={()=>{deleteUser(cId)}} editUser={(e)=>handleAdd(e,true,'EDIT',row)}/>
                         </TableCell>

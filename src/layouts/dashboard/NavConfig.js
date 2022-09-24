@@ -28,7 +28,7 @@ if(user === 'admin'){
   },
   {
     title: 'users',
-    path: '/dashboard/user',
+    path: '/dashboard/users',
     icon: getIcon('carbon:user-filled')}
     )
 }

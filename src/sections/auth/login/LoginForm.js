@@ -63,7 +63,7 @@ export default function LoginForm() {
             setAlert(
               <>
                 <Alert variant="filled" severity="error">
-                 wrong input
+                 {res.data.errorMsg}
                 </Alert>
                 <br />
               </>
