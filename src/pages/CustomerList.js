@@ -98,6 +98,7 @@ export default function Customer() {
        if(res.data.errorCode === 0){
         console.log(res.data.result);
           console.log(res.data);
+
           setUserList(res.data.result);
        }
        else{
@@ -170,18 +171,21 @@ export default function Customer() {
 
 
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
+   
     setOpen(true);
     console.log(data)
     const add = (data) => {
       setDialog();
       if(!upd){
         localStorage.setItem('cId', data.cId);
-        navigate('/dashboard/customerdetails');
+        handleClose();
+        navigate('/dashboard/customerdetails',{state:"add"});
       }
         display();
       
     };
     setDialog(() => (
+      
       <FullScreenDialog
         onClose={handleClose}
         open={open}

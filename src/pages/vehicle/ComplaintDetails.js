@@ -32,6 +32,7 @@ import Scrollbar from '../../components/Scrollbar';
 import Iconify from '../../components/Iconify';
 import SearchNotFound from '../../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user';
+import CustomizedDialogs from '../../utils/AlertDialogue';
 
 // mock
 // import USERLIST from '../_mock/user';
@@ -96,12 +97,16 @@ export default function ComplaintDetails(props) {
     setDialog();
   };
 
-  const [view, setView] = useState(false);
-  const [imgPop, setimgPop] = useState();
   const [open, setOpen] = useState(true);
+  
+  const [view, setView] = useState(true);
+  
+  const [imgPop, setimgPop] = useState(true);
+  
+  // const [open, setOpen] = useState(true);
 const [user,username] = useState("username");
   const [addDialog, setDialog] = useState();
-
+  const [addDeleteDialog, setDeleteDialog] = useState();
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -133,6 +138,11 @@ const [user,username] = useState("username");
       console.log(res);
           if(res.data.result.complaints){
             setUserList(res.data.result.complaints);
+            console.log("aaaaaaaaaaaaaaaaa");
+            console.log(USERLIST.length);
+            console.log("---------------------");
+            console.log(res.data.result.complaints);
+            
           }else{
             setUserList([]);
           }
@@ -149,6 +159,11 @@ console.log(vehicleDetails);
     displayComplaints();
   }, [])
 
+
+
+
+
+  
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -176,20 +191,29 @@ console.log(vehicleDetails);
     // ));
   };
   const deleteUser = (cmdid)=>{
-    const deleterequestdata = {
-      "type" : "SP_CALL",
-    "requestId" : 1900002,
-       request: {
-    "cmdId" : cmdid
+   console.log(USERLIST.length);
+    if(USERLIST.length===1){
+      setDialog(() => (
+        <CustomizedDialogs  onClose={handleClose}  name="complaint"/>
+      ))
+    }else{
+
+      const deleterequestdata = {
+        "type" : "SP_CALL",
+      "requestId" : 1900002,
+         request: {
+      "cmdId" : cmdid
+        }
       }
+
+      axios.post(ServiceURL,deleterequestdata).then((res) => {
+        console.log(res);   
+        displayComplaints();
+          }).catch(() => {
+              console.log('No internet connection found. App is running in offline mode.');
+            });
     }
-    
-    axios.post(ServiceURL,deleterequestdata).then((res) => {
-      console.log(res);   
-      displayComplaints();
-        }).catch(() => {
-            console.log('No internet connection found. App is running in offline mode.');
-          });
+   
              }
 
 
@@ -266,6 +290,7 @@ console.log(vehicleDetails);
         </Dialog>
       <Container maxWidth="xl">
       {addDialog}
+    
       <KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={()=>{navigate(-1)}} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
@@ -287,6 +312,7 @@ console.log(vehicleDetails);
           {/* <Button variant="contained" component={RouterLink} to="#" onClick={handleAdd} startIcon={<Iconify icon="eva:plus-fill" />}>
             New Complaint
           </Button> */}
+          
         </Stack>
 
         <Card>
@@ -307,16 +333,21 @@ console.log(vehicleDetails);
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                    
-                    const { cmdId, complaint, problem, image, status, company, avatarUrl, isVerified } = row;
+                    const { cdId, complaint, problem, image, status, company, avatarUrl, isVerified } = row;
                   //  const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
+
+                     
                       <TableRow >
                       
                         <TableCell component="th" scope="row">
                             {/* <Avatar alt={name} src={avatarUrl} /> */}
-                            <Typography variant="subtitle2" >
-                              {complaint}
+                            <Typography variant="subtitle2" sx={{cursor: "pointer"}}
+                            onClick={()=>{
+                              
+                           }}>
+                              {cdId}
                             </Typography>
                         </TableCell>
                         <TableCell align="left">{problem}</TableCell>
@@ -343,7 +374,7 @@ console.log(vehicleDetails);
                         </TableCell>
 
                         <TableCell align="right"  >
-                          <UserMoreMenu  callback={()=>{deleteUser(cmdId)}} editUser={(e)=>{}}/>
+                          <UserMoreMenu  callback={()=>{deleteUser(cdId)}} editUser={(e)=>{}}/>
                         </TableCell>
                       </TableRow>
                     );
