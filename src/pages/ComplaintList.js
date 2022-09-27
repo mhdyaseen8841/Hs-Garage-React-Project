@@ -134,6 +134,12 @@ const [user,username] = useState("username");
       }
   useEffect(() => {
     displayComplaints();
+     
+    if(data.state==="add"){
+      handleAdd()
+     }
+      
+   
   }, [])
 
   const handleRequestSort = (event, property) => {
@@ -146,8 +152,6 @@ const [user,username] = useState("username");
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
     setOpen(true);
     const add = (res) => {
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa");
-      console.log(res);
 displayComplaints()
       setDialog();
       

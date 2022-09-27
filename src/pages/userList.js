@@ -115,6 +115,7 @@ export default function User() {
             console.log('No internet connection found. App is running in offline mode.');
           });
       }
+      
   useEffect(() => {
    display();
   }, [])

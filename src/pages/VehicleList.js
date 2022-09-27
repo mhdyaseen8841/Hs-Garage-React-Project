@@ -119,7 +119,14 @@ export default function CustomerDetails() {
     
       
   useEffect(() => {
-   display();
+    display();
+   if(data.state==="add"){
+    handleAdd()
+   }
+    
+   
+    
+
   }, [])
 
   const [open, setOpen] = useState(true);
@@ -151,13 +158,15 @@ export default function CustomerDetails() {
       console.log(data);
       setDialog();
 
-
+      display();
       if(!upd){
         localStorage.setItem('vId', data.vId);
-      navigate('/dashboard/vehicledetails');
+        handleClose();
+        setOpen(false);
+      navigate('/dashboard/vehicledetails',{state:"add"});
       }
 
-      display();
+      
     };
     setDialog(() => (
       <FullScreenDialog

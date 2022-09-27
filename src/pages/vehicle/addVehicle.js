@@ -77,6 +77,7 @@ export default function FullScreenDialog(details) {
 {
   console.log(res);
   setAlert();
+  details.onClose();
   details.submit(res.data.result);
 }       else{
   console.log(res)

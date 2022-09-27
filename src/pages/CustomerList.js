@@ -176,7 +176,8 @@ export default function Customer() {
       setDialog();
       if(!upd){
         localStorage.setItem('cId', data.cId);
-        navigate('/dashboard/customerdetails');
+        handleClose();
+        navigate('/dashboard/customerdetails',{state:"add"});
       }
         display();
       
