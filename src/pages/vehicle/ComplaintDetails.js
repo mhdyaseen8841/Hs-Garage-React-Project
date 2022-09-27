@@ -98,6 +98,12 @@ export default function ComplaintDetails(props) {
   };
 
   const [open, setOpen] = useState(true);
+  
+  const [view, setView] = useState(true);
+  
+  const [imgPop, setimgPop] = useState(true);
+  
+  // const [open, setOpen] = useState(true);
 const [user,username] = useState("username");
   const [addDialog, setDialog] = useState();
   const [addDeleteDialog, setDeleteDialog] = useState();
