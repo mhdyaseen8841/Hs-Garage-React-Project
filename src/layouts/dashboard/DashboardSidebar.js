@@ -83,8 +83,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <NavSection navConfig={navConfig} />
 
       <Box sx={{ flexGrow: 1 }} />
-
-      
     </Scrollbar>
   );
 
