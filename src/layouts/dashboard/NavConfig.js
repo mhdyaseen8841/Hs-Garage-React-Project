@@ -29,7 +29,11 @@ if(user === 'admin'){
   {
     title: 'users',
     path: '/dashboard/users',
-    icon: getIcon('carbon:user-filled')}
+    icon: getIcon('carbon:user-filled')},
+  {
+    title: 'company',
+    path: '/dashboard/company',
+    icon: getIcon('teenyicons:garage-solid')}
     )
 }
 else if(user === 'staff'){

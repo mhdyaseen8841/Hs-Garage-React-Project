@@ -123,6 +123,7 @@ export default function DashboardApp() {
         "stopDate": date2.format("YYYY/MM/DD")
       }
     }
+    console.log(requestdata);
     requestPost(requestdata).then((res) => {
     console.log(res.data);
       if (res.data.errorCode === 0) {

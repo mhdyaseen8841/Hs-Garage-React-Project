@@ -22,7 +22,7 @@ export default function FullScreenDialog(details) {
   console.log(details.data);
   const [update, setUpdate] = useState(details.updated);
   const [showPassword, setShowPassword] = useState(false);
-  const [type, setType] = useState(update ? details.data.userType : 2);
+  const [type, setType] = useState(update ? details.data.userId : 2);
   const validSchema = Yup.object().shape({
     name: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Name is required'),
     Mobnum: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Mobile is required'),
@@ -56,7 +56,7 @@ export default function FullScreenDialog(details) {
         "mobile": values.Mobnum,
         "username": values.username,
         "password": values.password,
-        "userType": values.userType,
+        "userType": type,
         "id": update ? details.data.aId : 0
       }
     }
@@ -172,8 +172,7 @@ export default function FullScreenDialog(details) {
                 row
                 aria-labelledby="demo-radio-buttons-group-label"
                 defaultValue={update ? details.data.userId : 2}
-                {...getFieldProps('userType')}
-                onChange={(e) => setType(e.target.value)}
+                onChange={(e) => { console.log(e.target.value); setType(e.target.value)}}
               >
                 <FormControlLabel
                   value={1}
