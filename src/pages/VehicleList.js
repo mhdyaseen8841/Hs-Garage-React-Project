@@ -175,7 +175,7 @@ export default function CustomerDetails() {
   };
 
   const deleteUser = (vId)=>{
-console.log("---------------sdfffffffff");
+
 console.log(USERLIST.length);
     if(USERLIST.length===1){
       setDialog(() => (
