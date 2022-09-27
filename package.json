@@ -13,11 +13,13 @@
     "eject": "react-scripts eject",
     "dev": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm run electron\"",
     "electron": "wait-on tcp:3000 && electron .",
+    "build-electron": "mkdir build/src && robocopy electron build/electron /S & robocopy src/shared build/src/shared /S",
     "lint": "eslint --ext .js,.jsx ./src",
     "lint:fix": "eslint --fix --ext .js,.jsx ./src",
     "clear-all": "rm -rf build node_modules",
     "re-start": "rm -rf build node_modules && yarn install && yarn start",
-    "re-build": "rm -rf build node_modules && yarn install && yarn build"
+    "re-build": "rm -rf build node_modules && yarn install && yarn build",
+    "package": "electron-builder build --mac --win -c.extraMetadata.main=build/electron/main.js --publish never"
   },
   "eslintConfig": {
     "extends": [
@@ -92,6 +94,7 @@
     "@capacitor/cli": "4.2.0",
     "@svgr/webpack": "^6.2.1",
     "concurrently": "^7.4.0",
+    "electron-builder": "^23.3.3",
     "eslint": "^8.19.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",

@@ -216,7 +216,7 @@ export default function User() {
 
  
   const StatusMenu = (prop)=>{
-
+    console.log(prop);
     const ref = useRef(null)
     const [isOpen, setIsOpen] = useState(false);
     const spcall = (status)=>{
@@ -228,6 +228,7 @@ export default function User() {
 	       "status" : status
        }
       }
+      console.log(requestdata);
       axios.post(ServiceURL,requestdata).then((res) => {
         console.log(res);
          display();
@@ -308,9 +309,9 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { aid, name, role, mobile, username, userType, status } = row;
+                    const { aId, name, role, mobile, username, userType, status } = row;
                     let stst = 'active'
-                   if(aid === parseInt(localStorage.getItem('loginId'), 10)){
+                   if(aId === parseInt(localStorage.getItem('loginId'), 10)){
                     return;
                    }
                   if(status === 1){
@@ -336,7 +337,7 @@ export default function User() {
                         </TableCell>
 
                         <TableCell align="right" >
-                        <StatusMenu ref={ref} status={status} aid={aid} row={row}/>
+                        <StatusMenu ref={ref} status={status} aid={aId}/>
                         </TableCell>
                       </TableRow>
                     );

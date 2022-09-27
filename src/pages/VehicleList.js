@@ -101,7 +101,6 @@ export default function CustomerDetails() {
   function display(){
     console.log(data.state);
     axios.post(ServiceURL,requestdata).then((res) => {
-      
       console.log(res.data);
       setUsername(res.data.result.cname)
   if(res.data.errorCode===0){
@@ -150,13 +149,10 @@ export default function CustomerDetails() {
     const add = (data) => {
       console.log(data);
       setDialog();
-
-
       if(!upd){
         localStorage.setItem('vId', data.vId);
       navigate('/dashboard/vehicledetails');
       }
-
       display();
     };
     setDialog(() => (

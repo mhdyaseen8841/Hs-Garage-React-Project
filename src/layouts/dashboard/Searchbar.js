@@ -72,9 +72,6 @@ export default function Searchbar() {
             </Button>
           </SearchbarStyle>
         </Slide>
-        <Slide direction="up" in={isOpen} mountOnEnter unmountOnExit>
-            <div>HELLO</div>
-        </Slide>
       </div>
     </ClickAwayListener>
   );
