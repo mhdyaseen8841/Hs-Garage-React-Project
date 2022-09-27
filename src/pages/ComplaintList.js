@@ -37,6 +37,8 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 import FullScreenDialog from './vehicle/addVehicle';
 import AddComplaint from './vehicle/AddComplaint';
+import CustomizedDialogs from '../utils/AlertDialogue';
+
 // mock
 // import USERLIST from '../_mock/user';
 import ServiceURL from '../constants/url';
@@ -172,6 +174,12 @@ displayComplaints()
 
 
   const deleteUser = (cmId)=>{
+
+    if(USERLIST.length===1){
+      setDialog(() => (
+        <CustomizedDialogs  onClose={handleClose}  name="complaint"/>
+      ))
+    }else{
     const deleterequestdata =
     {
          "type" : "SP_CALL",
@@ -188,6 +196,7 @@ displayComplaints()
             console.log('No internet connection found. App is running in offline mode.');
           });
              }
+            }
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
