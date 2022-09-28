@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Link as RouterLink,useNavigate } from 'react-router-dom';
+import { Link as RouterLink,useNavigate, useLocation } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Card, Link, Container, Typography } from '@mui/material';
@@ -58,11 +58,16 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function Login() {
+export default function Login(props) {
   const navigate = useNavigate();
+  const location = useLocation();
   useEffect(() => {
+    if(location.state === 'logout'){
+      window.location.reload(false);
+      window.history.replaceState({}, document.title)
+    }
     if (localStorage.getItem('loginId') !== null) {
-      navigate('/dashboard/App', { replace: true });
+      navigate('/dashboard/app', { replace: true });
     }
   }, []);
 

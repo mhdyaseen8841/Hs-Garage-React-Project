@@ -103,7 +103,6 @@ export default function CustomerDetails() {
   function display(){
     console.log(data.state);
     axios.post(ServiceURL,requestdata).then((res) => {
-      
       console.log(res.data);
       setUsername(res.data.result.cname)
   if(res.data.errorCode===0){
@@ -159,16 +158,23 @@ export default function CustomerDetails() {
     const add = (data) => {
       console.log(data);
       setDialog();
+<<<<<<< HEAD
+=======
 
       display();
+>>>>>>> b12b70e8a6f575f8d6f165292f351e8835925336
       if(!upd){
         localStorage.setItem('vId', data.vId);
         handleClose();
         setOpen(false);
       navigate('/dashboard/vehicledetails',{state:"add"});
       }
+<<<<<<< HEAD
+      display();
+=======
 
       
+>>>>>>> b12b70e8a6f575f8d6f165292f351e8835925336
     };
     setDialog(() => (
       <FullScreenDialog

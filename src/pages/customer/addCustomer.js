@@ -79,7 +79,7 @@ export default function FullScreenDialog(details) {
   
   setAlert();
   if(update){
-    details.submit('') 
+    details.submit('')
   }else
   {
     details.submit(res.data.result);
