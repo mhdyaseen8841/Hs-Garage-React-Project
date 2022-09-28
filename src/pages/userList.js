@@ -168,18 +168,10 @@ export default function User() {
           });
              }
 
-
-         
-    
-
-             
-
-
-
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
-    setOpen(true);
     console.log(data)
     const add = (data) => {
+      setOpen(false) ;
       setDialog();
       display();
     };
@@ -193,6 +185,7 @@ export default function User() {
          data={data}
       />
     ));
+    setOpen(true);
   };
 
 
@@ -338,7 +331,7 @@ export default function User() {
                         </TableCell>
 
                         <TableCell align="right" >
-                        <StatusMenu ref={ref} status={status} aid={aId}/>
+                        <StatusMenu ref={ref} status={status} aid={aId} row={row} />
                         </TableCell>
                       </TableRow>
                     );

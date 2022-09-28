@@ -18,6 +18,7 @@ import ComplaintDetails from './pages/vehicle/ComplaintDetails';
 import Profile from './pages/profile';
 import Settings from './pages/settings';
 import User from './pages/userList';
+import Company from './pages/company';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -45,7 +46,7 @@ export default function Router() {
         {path:'VehicleDetails', element: <VehicleDetails/> },
         {path:'complaintDetails', element: <ComplaintDetails/> },
         {path:'users', element: <User /> },
-        
+        {path:'company', element: <Company /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> }
       ],

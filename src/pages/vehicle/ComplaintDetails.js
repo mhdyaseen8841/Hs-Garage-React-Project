@@ -99,7 +99,7 @@ export default function ComplaintDetails(props) {
 
   const [open, setOpen] = useState(true);
   
-  const [view, setView] = useState(true);
+  const [view, setView] = useState(false);
   
   const [imgPop, setimgPop] = useState(true);
   
@@ -347,7 +347,7 @@ console.log(vehicleDetails);
                             onClick={()=>{
                               
                            }}>
-                              {cdId}
+                              {complaint}
                             </Typography>
                         </TableCell>
                         <TableCell align="left">{problem}</TableCell>

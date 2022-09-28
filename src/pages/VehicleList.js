@@ -104,9 +104,10 @@ export default function CustomerDetails() {
     console.log(data.state);
     axios.post(ServiceURL,requestdata).then((res) => {
       console.log(res.data);
-      setUsername(res.data.result.cname)
-  if(res.data.errorCode===0){
-    
+      console.log(res.data.errorCode === 0);
+      console.log(res.data.errorCode);
+  if(res.data.errorCode === 0){
+    setUsername(res.data.result.cname);
     setUserList(res.data.result.vehicles);
   }else{
     setUserList([]);
@@ -157,24 +158,13 @@ export default function CustomerDetails() {
     setOpen(true);
     const add = (data) => {
       console.log(data);
-      setDialog();
-<<<<<<< HEAD
-=======
-
       display();
->>>>>>> b12b70e8a6f575f8d6f165292f351e8835925336
+      setDialog();
+      setOpen(false);
       if(!upd){
-        localStorage.setItem('vId', data.vId);
-        handleClose();
-        setOpen(false);
+      localStorage.setItem('vId', data.vId);
       navigate('/dashboard/vehicledetails',{state:"add"});
       }
-<<<<<<< HEAD
-      display();
-=======
-
-      
->>>>>>> b12b70e8a6f575f8d6f165292f351e8835925336
     };
     setDialog(() => (
       <FullScreenDialog
