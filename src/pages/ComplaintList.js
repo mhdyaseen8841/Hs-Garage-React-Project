@@ -156,7 +156,7 @@ const [user,username] = useState("username");
     const add = (res) => {
 displayComplaints()
       setDialog();
-      
+ 
       // navigate('/dashboard/customerdetails', {state:{name:title}});
     };
     setDialog(() => (

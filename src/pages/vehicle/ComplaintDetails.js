@@ -33,7 +33,7 @@ import Iconify from '../../components/Iconify';
 import SearchNotFound from '../../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user';
 import CustomizedDialogs from '../../utils/AlertDialogue';
-
+import EditComplaint from './EditComplaint';
 // mock
 // import USERLIST from '../_mock/user';
 import ServiceURL from '../../constants/url';
@@ -99,9 +99,9 @@ export default function ComplaintDetails(props) {
 
   const [open, setOpen] = useState(true);
   
-  const [view, setView] = useState(true);
+  const [view, setView] = useState();
   
-  const [imgPop, setimgPop] = useState(true);
+  const [imgPop, setimgPop] = useState();
   
   // const [open, setOpen] = useState(true);
 const [user,username] = useState("username");
@@ -138,9 +138,7 @@ const [user,username] = useState("username");
       console.log(res);
           if(res.data.result.complaints){
             setUserList(res.data.result.complaints);
-            console.log("aaaaaaaaaaaaaaaaa");
-            console.log(USERLIST.length);
-            console.log("---------------------");
+           
             console.log(res.data.result.complaints);
             
           }else{
@@ -174,22 +172,23 @@ console.log(vehicleDetails);
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
     setOpen(true);
     const add = (res) => {
-      console.log(res);
+displayComplaints()
       setDialog();
-      
       // navigate('/dashboard/customerdetails', {state:{name:title}});
     };
-    // setDialog(() => (
-    //   <AddComplaint
-    //     onClose={handleClose}
-    //     open={open}
-    //      submit={add}
-    //      updated={upd}
-    //      button={button}
-    //      data={data}
-    //   />
-    // ));
+
+    setDialog(() => (
+      <EditComplaint
+        onClose={handleClose}
+        open={open}
+         submit={add}
+         updated={upd}
+         button={button}
+         data={data}
+      />
+    ));
   };
+
   const deleteUser = (cmdid)=>{
    console.log(USERLIST.length);
     if(USERLIST.length===1){
@@ -347,7 +346,7 @@ console.log(vehicleDetails);
                             onClick={()=>{
                               
                            }}>
-                              {cdId}
+                              {complaint}
                             </Typography>
                         </TableCell>
                         <TableCell align="left">{problem}</TableCell>
@@ -374,7 +373,7 @@ console.log(vehicleDetails);
                         </TableCell>
 
                         <TableCell align="right"  >
-                          <UserMoreMenu  callback={()=>{deleteUser(cdId)}} editUser={(e)=>{}}/>
+                          <UserMoreMenu  callback={()=>{deleteUser(cdId)}}  editUser={(e)=>handleAdd(e,true,'EDIT',row)}/>
                         </TableCell>
                       </TableRow>
                     );
