@@ -48,7 +48,7 @@ export default function AddComplaint(details) {
     onSubmit: (values, actions) => {
       console.log("submited")
       handleAddNew();
-      
+      formik.resetForm();
     }
   });
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setFieldValue } = formik;

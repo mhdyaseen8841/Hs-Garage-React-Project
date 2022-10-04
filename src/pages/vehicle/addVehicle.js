@@ -19,7 +19,7 @@ import ServiceURL from '../../constants/url';
 
 
 export default function FullScreenDialog(details) {
-  
+  const [yearlimit,setyearlimit] = useState(false);
   const [update, setUpdate] = useState(details.updated);
   const validSchema = Yup.object().shape({
     VehicleNum: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Number is required'),
@@ -128,8 +128,8 @@ export default function FullScreenDialog(details) {
               variant="outlined"
               value={details.update ? details.data.name : ''}
               {...getFieldProps('VehicleNum')}
-              error={Boolean(touched.Mobnum && errors.Mobnum || alertMsg)}
-              helperText={touched.Mobnum && errors.Mobnum || alertMsg}
+              error={Boolean(touched.VehicleNum && errors.VehicleNum || alertMsg)}
+              helperText={touched.VehicleNum && errors.VehicleNum || alertMsg}
             />
             <TextField
               fullWidth
@@ -137,8 +137,8 @@ export default function FullScreenDialog(details) {
               label="Vehicle Company"
               variant="outlined"
               {...getFieldProps('VehicleCompany')}
-              error={Boolean(touched.CustomerName && errors.CustomerName)}
-              helperText={touched.CustomerName && errors.CustomerName}
+              error={Boolean(touched.VehicleCompany && errors.VehicleCompany)}
+              helperText={touched.VehicleCompany && errors.VehicleCompany}
             />
             <TextField
               fullWidth
@@ -146,20 +146,30 @@ export default function FullScreenDialog(details) {
               label="Model Name"
               variant="outlined"
               {...getFieldProps('ModelName')}
-              error={Boolean(touched.Email && errors.Email)}
-              helperText={touched.Email && errors.Email}
+              error={Boolean(touched.ModelName && errors.ModelName)}
+              helperText={touched.ModelName && errors.ModelName}
             />
             <TextField
               fullWidth
-              type="text"
+              type="number"
+              maxlength={4}
               label="Year"
               variant="outlined"
+              onInput = {(e) =>{
+
+                e.target.value = Math.max(0, parseInt(e.target.value,10) ).toString().slice(0,4)
+                const cyear = new Date().getFullYear()
+                if(cyear < parseInt(e.target.value,10) ){
+                  setyearlimit(true);
+                }
+                else{
+                  setyearlimit(false);
+                }
+               }}
               {...getFieldProps('Year')}
-              error={Boolean(touched.Address && errors.Address)}
-              helperText={touched.Address && errors.Address}
+              error={Boolean(touched.Year && errors.Year)|| yearlimit}
+              helperText={touched.Year && errors.Year || yearlimit && "enter correct Model Year"}
             />
-           
-            
           </Stack>
         </Container>
       </Dialog>

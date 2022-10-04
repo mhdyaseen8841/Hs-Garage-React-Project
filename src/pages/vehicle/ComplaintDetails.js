@@ -99,7 +99,7 @@ export default function ComplaintDetails(props) {
 
   const [open, setOpen] = useState(true);
   
-  const [view, setView] = useState();
+  const [view, setView] = useState(false);
   
   const [imgPop, setimgPop] = useState();
   
