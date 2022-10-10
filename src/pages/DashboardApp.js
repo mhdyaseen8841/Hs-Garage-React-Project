@@ -6,12 +6,12 @@ import dayjs from 'dayjs';
 import { useTheme } from '@mui/material/styles';
 import {
   Stack,
-  Grid, 
-  Container, 
-  Typography, 
-  TextField, 
-  TableRow, 
-  Card, 
+  Grid,
+  Container,
+  Typography,
+  TextField,
+  TableRow,
+  Card,
   Table,
   TableBody,
   TableCell,
@@ -49,7 +49,7 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'mobile', label: 'Mobile', alignRight: false },
   { id: 'address', label: 'Address', alignRight: false },
-  { id : 'staff',label: 'staff', alignRight: false },
+  { id: 'staff', label: 'staff', alignRight: false },
   { id: 'visitDate', label: 'visit Date', alignRight: false },
   { id: 'status', label: 'status', alignRight: false },
   { id: '' },
@@ -88,7 +88,7 @@ function applySortFilter(array, comparator, query) {
 }
 export default function DashboardApp() {
   const theme = useTheme();
-  
+
   const navigate = useNavigate()
 
   const [USERLIST, setUserList] = useState([]);
@@ -114,6 +114,10 @@ export default function DashboardApp() {
   const [counts, setCounts] = useState({});
   const [chartData, setChartData] = useState([]);
   const [chartlabel, setChartLable] = useState([]);
+  let user = false;
+    if (localStorage.getItem('userType') != null && localStorage.getItem('userType') === 'admin') {
+      user = true;
+    }
   const dateChange = (date1, date2) => {
     const requestdata = {
       "type": "SP_CALL",
@@ -123,26 +127,27 @@ export default function DashboardApp() {
         "stopDate": date2.format("YYYY/MM/DD")
       }
     }
+    
     console.log(requestdata);
     requestPost(requestdata).then((res) => {
-    console.log(res.data);
+      console.log(res.data);
       if (res.data.errorCode === 0) {
         console.log(res.data.result)
         const label = []
         const cdata = []
-        if(res.data.result.chart[0] != null){
-        res.data.result.chart.map((data) => {
-          label.push(data.date)
-          cdata.push(data.amount)
-          return data;
-        })
-       }
-       if(res.data.result.tableData[0] != null){
-        setUserList(res.data.result.tableData);
-       }
-       else{
-        setUserList([])
-       }
+        if (res.data.result.chart[0] != null) {
+          res.data.result.chart.map((data) => {
+            label.push(data.date)
+            cdata.push(data.amount)
+            return data;
+          })
+        }
+        if (res.data.result.tableData[0] != null) {
+          setUserList(res.data.result.tableData);
+        }
+        else {
+          setUserList([])
+        }
         setChartData(cdata);
         setChartLable(label)
         console.log(USERLIST);
@@ -245,7 +250,7 @@ export default function DashboardApp() {
               />
             </LocalizationProvider>
           </Grid>
-          <Grid item xs={12} md={12} lg={12}>
+          {user && <Grid item xs={12} md={12} lg={12}>
             <AppWebsiteVisits
               title="SALES"
               subheader="price"
@@ -253,6 +258,7 @@ export default function DashboardApp() {
               chartData={[{ name: 'AMOUNT', type: 'column', fill: 'solid', data: chartData }]}
             />
           </Grid>
+          }
 
           <Grid item xs={12} md={12} lg={12}>
 
@@ -263,7 +269,7 @@ export default function DashboardApp() {
               <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
               <Scrollbar>
                 <TableContainer sx={{ minWidth: 800 }}>
-                
+
                   <Table >
                     <UserListHead
                       order={order}
@@ -274,15 +280,15 @@ export default function DashboardApp() {
                     />
                     <TableBody>
                       {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                        const { username,name, mobile, address, vnumber, vdate ,status, cmId } = row;
+                        const { username, name, mobile, address, vnumber, vdate, status, cmId } = row;
                         // const title = name;
                         //  const isItemSelected = selected.indexOf(name) !== -1;
                         return (
                           <TableRow>
-                            <TableCell component="th" scope="row" onClick={()=>{
+                            <TableCell component="th" scope="row" onClick={() => {
                               localStorage.setItem('cmId', cmId);
                               console.log(cmId)
-                             navigate('/dashboard/complaintDetails')
+                              navigate('/dashboard/complaintDetails')
                             }}>
                               <Typography variant="h6" sx={{ cursor: "pointer" }}  >
                                 {vnumber}
@@ -294,10 +300,10 @@ export default function DashboardApp() {
                             <TableCell align="left">{username}</TableCell>
                             <TableCell align="left">{vdate}</TableCell>
                             <TableCell align="left">
-                          <Label variant="ghost" color={status === 0 ? 'error' : 'success'}>
-                            {status === 0 ? 'not completed' : 'completed'}
-                          </Label>
-                        </TableCell>
+                              <Label variant="ghost" color={status === 0 ? 'error' : 'success'}>
+                                {status === 0 ? 'not completed' : 'completed'}
+                              </Label>
+                            </TableCell>
 
                             {/* <TableCell align="right"  >
                               <UserMoreMenu callback={deleteUser} editUser={handleAdd} />

@@ -13,7 +13,7 @@ import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 //
-import navConfig from './NavConfig';
+import {getNavConfig} from './NavConfig';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
-
+  const navConfig = getNavConfig();
   const isDesktop = useResponsive('up', 'lg');
 
   useEffect(() => {

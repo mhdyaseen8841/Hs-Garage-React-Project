@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import imageCompression from 'browser-image-compression';
+import { useNavigate } from 'react-router-dom';
 // material
 import { Button, Grid, Container, Stack, Typography, Avatar } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
@@ -22,10 +23,16 @@ import PasswordChange from '../sections/settingsPop/passwordChange';
 import ServiceURL from '../constants/url';
 // components
 import Page from '../components/Page';
+
 // ----------------------------------------------------------------------
 
 export default function Settings() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  let user = false;
+  if(localStorage.getItem('userType') != null && localStorage.getItem('userType') === 'admin'){
+   user = true;
+  }
   const handleClose = () => {
     setOpen(false);
   };
@@ -75,10 +82,19 @@ export default function Settings() {
             </nav>
             <Divider />
             <nav aria-label="secondary mailbox folders">
+              { user &&
               <List>
                 <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemText primary="Contact" />
+                  <ListItemButton onClick={()=>navigate('../company')}>
+                    <ListItemText primary="Company" />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+              }
+              <List>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={()=>{window.open('https://www.microredsolutions.in/', '_blank')}}>
+                    <ListItemText primary="Contact Developer"/>
                   </ListItemButton>
                 </ListItem>
               </List>
