@@ -4,6 +4,7 @@ import { React, useState } from 'react';
 // material
 import {
   TextField,
+  InputAdornment,
   Card,
   Table,
   Stack,
@@ -19,7 +20,8 @@ import {
   TablePagination,
   TableHead,
   MenuItem,
-  Autocomplete
+  Autocomplete,
+  OutlinedInput
 } from '@mui/material';
 
 
@@ -32,62 +34,58 @@ function Billing() {
   const top100Films = [
     {
       label: "Desktop PC",
-      value: 1
+      rate: 10,
     },
     {
       label: "Notebook",
-      value: 2
+      rate: 25
     },
     {
       label: "Monitor",
-      value: 3
+      rate: 36
     }
   ]
+  const today = new Date();
+const dd = String(today.getDate()).padStart(2, '0');
+const mm = String(today.getMonth() + 1).padStart(2, '0'); 
+const yyyy = today.getFullYear();
+const dte = `${yyyy}-${mm}-${dd}`;
+console.log(dte);
   return (
     <Page title="Billing" /* sx={{ paddingTop: 2 }} */>
       <h1>Billing</h1>
       <Container maxWidth="xl" mt={5}>
         <Stack direction="row" mb={2} justifyContent="space-between" pl={2} pr={2} /* alignItems="center" */ >
           <TextField id="outlined-basic" label="Customer Name" style={{ width: '25%' }} variant="outlined" />
-
           <TextField id="outlined-basic" label="invoice #" style={{ width: '25%' }} variant="outlined" />
         </Stack>
-
-
         <Stack direction="row" mb={2} justifyContent="flex-end" pl={2} pr={2} width={'100%'} /* alignItems="center"  */ >
-          <TextField id="outlined-basic" label="Issued Date" style={{ width: '25%' }} variant="outlined" />
+          <TextField type="date" id="outlined-basic" label="Issued Date" style={{ width: '25%' }} variant="outlined" value={dte} />
         </Stack>
-
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800 }}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell width={20}>#</TableCell>
-                  <TableCell width={600}>ITEM</TableCell>
-                  <TableCell>QTY</TableCell>
-                  <TableCell>PRICE</TableCell>
-                  <TableCell>TOTAL</TableCell>
+                  <TableCell width={20} padding={0}>#</TableCell>
+                  <TableCell width={600} padding={0}>ITEM</TableCell>
+                  <TableCell padding={0}>QTY</TableCell>
+                  <TableCell padding={0}>PRICE</TableCell>
+                  <TableCell padding={0}>AMOUNT</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {[...Array(noOfRows)].map((elementInArray, index) => {
+                {[...Array(noOfRows)].map((elementInArray, ind) => {
                   return (
                     <TableRow>
-                      {/* <TextField id="outlined-basic" label="Item" style ={{width: '49%'}}   variant="outlined">
-        {categoryDB.map((option) => (
-        <MenuItem key={option.value} value={option.value}>
-        {option.label}
-      </MenuItem>
-        ))}
-      </TextField> */}
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>
+                      <TableCell padding={0}>{ind + 1}</TableCell>
+                      <TableCell padding={0}>
                         <Autocomplete
                           freeSolo
-                          id={`itemcomplete${index}`}
+                          id={`itemcomplete${ind}`}
                           disableClearable
-                          options={top100Films.map((option) => option.label)}
+                          options={top100Films}
+                          onChange={(event, value)=>{document.getElementById(`price${ind}`).value = value.rate; console.log(value);}}
                           renderInput={(params) => (
                             <TextField
                               {...params}
@@ -100,14 +98,14 @@ function Billing() {
                           )}
                         />
                       </TableCell>
-                      <TableCell>
-                        <TextField id={`qty${index}`} label="Qty" variant="outlined" />
+                      <TableCell padding={0}>
+                        <OutlinedInput type='number' id={`qty${ind}`} label="1" onChange={(e)=>{document.getElementById(`total${ind}`).value = document.getElementById(`price${ind}`).value * e.target.value}} />
                       </TableCell>
-                      <TableCell>
-                        <TextField id={`price${index}`} label="Price" variant="outlined" />
+                      <TableCell padding={0}>
+                        <OutlinedInput type='number' id={`price${ind}`} endAdornment={<InputAdornment position="end">AED</InputAdornment>}  label="1" inputProps={{min: 0, style: { textAlign: 'right' }}}  onChange={(e)=>{document.getElementById(`total${ind}`).value = document.getElementById(`qty${ind}`).value * e.target.value}}/>
                       </TableCell>
-                      <TableCell>
-                        <TextField id={`total${index}`} label="Total" variant="outlined" />
+                      <TableCell padding={0}>
+                        <OutlinedInput disabled type='number' id={`total${ind}`} endAdornment={<InputAdornment position="end">AED</InputAdornment>} label="1" inputProps={{min: 0, style: { textAlign: 'right' }}} />
                       </TableCell>
                     </TableRow>
                   )
