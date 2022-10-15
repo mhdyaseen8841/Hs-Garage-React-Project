@@ -33,8 +33,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 import FullScreenDialog from './customer/addCustomer';
 import requestPost from '../serviceWorker';
-// mock
-// import USERLIST from '../_mock/user';
+// mock';
 import ServiceURL from '../constants/url';
 
 

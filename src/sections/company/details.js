@@ -22,21 +22,28 @@ export default function DetailsChange(props) {
   const [snackbarState, setSnackstate] = useState(false);
   const formik = useFormik({
     initialValues: {
-      name: '',
-      mobile: '',
-      email: ''
+      name: props.data.name,
+      mobile: props.data.mobile,
+      email: props.data.email
     },
     validationSchema: validSchema,
     onSubmit: (values, actions) => {
       const requestOptions = {
-        "type": "SP_CALL",
-      "requestId": 6511354,
-      "request": {
-        "uid" : localStorage.getItem("loginId"),
-        "npassword": getFieldProps('newP').value,
-        "cpassword": getFieldProps('currentP').value
-        }
-      }
+        "type" : "SP_CALL",
+        "requestId" : 2400003,
+        "request": {
+	      "companyname" : values.name,
+        "mobile" : values.mobile,
+        "email" : values.email,
+        "addresss" : props.data.address,
+        "city" : props.data.city,
+        "tax" : props.data.tax,
+        "bankname" : props.data.bank,
+        "accnumber" : props.data.accnumber,
+        "ifsc" : props.data.ifsc
+}
+  }
+
       axios.post(ServiceURL, requestOptions).then((res) => {
         if (res.data.errorCode === 1) {
           setAlertState('success');
