@@ -24,19 +24,26 @@ export default function BankChange(props) {
   const [snackbarState, setSnackstate] = useState(false);
   const formik = useFormik({
     initialValues: {
-      currentP: '',
-      newP: '',
-      repeatNewP: ''
+      accno: props.data.accnumber,
+      ifsc: props.data.ifsc,
+      bank: props.data.bank
     },
+    enableReinitialize: true,
     validationSchema: validSchema,
     onSubmit: (values, actions) => {
       const requestOptions = {
         "type": "SP_CALL",
-      "requestId": 6511354,
-      "request": {
-        "uid" : localStorage.getItem("loginId"),
-        "npassword": getFieldProps('newP').value,
-        "cpassword": getFieldProps('currentP').value
+        "requestId": 2400003,
+        "request": {
+          "companyname": props.data.name,
+          "mobile": props.data.mobile,
+          "email": props.data.email,
+          "addresss": props.data.address,
+          "city": props.data.city,
+          "tax": props.data.tax,
+          "bankname": values.bank,
+          "accnumber": values.accno,
+          "ifsc": values.ifsc
         }
       }
       axios.post(ServiceURL, requestOptions).then((res) => {
@@ -60,6 +67,10 @@ export default function BankChange(props) {
       });
     }
   });
+  useEffect(() => {
+
+  }, [props.data])
+
   const handleClose = () => {
     setSnackstate(false);
   };

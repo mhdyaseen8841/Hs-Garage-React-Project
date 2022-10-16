@@ -35,24 +35,30 @@ export default function Company(props) {
     const [edit2, setEdit2] = useState(false);
     const [edit3, setEdit3] = useState(false);
     const [datas, setdatas] = useState({});
-    const [proImg, setImg] = useState('https://png.pngtree.com/png-clipart/20190604/original/pngtree-creative-company-logo-png-image_1420804.jpg');
+    const [proImg, setImg] = useState('https://microredsolutions.in/assets/images/mr_logo.png');
     const profileClick = () => {
         setOpen(true);
     };
 
     useEffect(() => {
-        const requestData = {
-          "type": "SP_CALL",
-          "requestId": 2400005,
-          "request": {}
-        }
-        requestPost(requestData).then((res) => {
-          if (res.data.errorCode === 1) {
-            setdatas(res.data.result);
-          }
-        })
+        request();
       }, [])
     
+      const request = ()=>{
+        const requestData = {
+            "type": "SP_CALL",
+            "requestId": 2400005,
+            "request": {}
+          }
+          requestPost(requestData).then((res) => {
+            if (res.data.errorCode === 1) {
+              setdatas(res.data.result);
+              if(res.data.result.logo !== ""){
+                setImg(res.data.result.logo);
+              }
+            }
+          })
+      }
     const handleClose = () => {
         setOpen(false);
         setEdit1(false);
@@ -85,16 +91,38 @@ export default function Company(props) {
         }
     };
     const uploadToServer = (file) => {
-        console.log(file)
+        console.log(file);
+        const reader = new FileReader();
+       reader.onloadend = function() {
+        console.log(reader.result);
+         const requestData = {
+            "type": "SP_CALL",
+            "requestId": 2400004,
+            "request": {
+                logo: reader.result
+            }
+          }
+          console.log(requestData);
+          requestPost(requestData).then((res) => {
+            if (res.data.errorCode === 1) {
+              setdatas(res.data.result);
+              request();
+              setOpen(false);
+            }
+          })
+         }
+         reader.readAsDataURL(file);
     };
     const handleChange = (e) => {
         fileCompress(e.target.files[0]);
     };
     const callback1 = () => {
         setEdit1(false);
+        request();
     };
     const callback2 = () => {
         setEdit2(false);
+        request();
     };
     return (
         <div>
@@ -114,7 +142,7 @@ export default function Company(props) {
                     />
                     <DialogTitle>Change Details</DialogTitle>
                     <DialogContent>
-                        <DetailsChange callback={callback1} />
+                        <DetailsChange callback={callback1} data={datas} />
                     </DialogContent>
                 </Dialog>
 
@@ -133,7 +161,7 @@ export default function Company(props) {
                     />
                     <DialogTitle>Change Address</DialogTitle>
                     <DialogContent>
-                        <AddressChange callback={callback2} />
+                        <AddressChange callback={callback2} data={datas} />
                     </DialogContent>
                 </Dialog>
 
@@ -152,7 +180,7 @@ export default function Company(props) {
                     />
                     <DialogTitle>Change Details</DialogTitle>
                     <DialogContent>
-                        <BankChange callback={callback1} />
+                        <BankChange callback={callback1} data={datas} />
                     </DialogContent>
                 </Dialog>
                 <Dialog open={view}>
@@ -218,7 +246,7 @@ export default function Company(props) {
                                 onClick={() => { setOpen(true) }}
                             >
                                 <img
-                                    src="https://png.pngtree.com/png-clipart/20190604/original/pngtree-creative-company-logo-png-image_1420804.jpg"
+                                    src={proImg}
                                     alt=""
                                     height="100%"
                                     width="100%"
@@ -250,7 +278,7 @@ export default function Company(props) {
                                         number
                                     </Typography>
                                     <Typography variant="body2" style={{ color: '#555' }}>
-                                    {datas && datas.number}
+                                    {datas && datas.mobile}
                                     </Typography>
                                 </Stack>
                                 <Stack direction='row' sx={{ justifyContent: 'space-between', padding: 2 }}>
@@ -258,7 +286,7 @@ export default function Company(props) {
                                         email
                                     </Typography>
                                     <Typography variant="body2" style={{ color: '#555' }}>
-                                       {datas && datas.name}
+                                       {datas && datas.email}
                                     </Typography>
                                 </Stack>
                             </Card>
@@ -289,7 +317,7 @@ export default function Company(props) {
                                         city
                                     </Typography>.
                                     <Typography variant="body2" style={{ color: '#555' }}>
-                                    {datas && datas.address}
+                                    {datas && datas.city}
                                     </Typography>
                                 </Stack>
                                 <Stack direction='row' sx={{ justifyContent: 'space-between', padding: 2 }}>
@@ -317,7 +345,7 @@ export default function Company(props) {
                                 <EditIcon sx={{ position: 'absolute', right: 15, top: 10, cursor: 'pointer' }} onClick={() => { setEdit3(true) }} />
                                 <Stack direction='row' sx={{ justifyContent: 'space-between', padding: 2 }}>
                                     <Typography variant="h6" style={{ color: '#555' }}>
-                                        Accont No.
+                                        Account No.
                                     </Typography>
                                     <Typography variant="body2" style={{ color: '#555' }}>
                                     {datas && datas.accnumber}

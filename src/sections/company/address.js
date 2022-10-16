@@ -24,21 +24,27 @@ export default function AddressChange(props) {
   const [snackbarState, setSnackstate] = useState(false);
   const formik = useFormik({
     initialValues: {
-      currentP: '',
-      newP: '',
-      repeatNewP: ''
+      saddress: props.data.address,
+      city: props.data.city,
+      tax: props.data.tax
     },
     validationSchema: validSchema,
     onSubmit: (values, actions) => {
       const requestOptions = {
-        "type": "SP_CALL",
-      "requestId": 6511354,
-      "request": {
-        "uid" : localStorage.getItem("loginId"),
-        "npassword": getFieldProps('newP').value,
-        "cpassword": getFieldProps('currentP').value
-        }
-      }
+        "type" : "SP_CALL",
+        "requestId" : 2400003,
+        "request": {
+	      "companyname" : props.data.name,
+        "mobile" : props.data.mobile,
+        "email" : props.data.email,
+        "addresss" : values.saddress,
+        "city" : values.city,
+        "tax" : values.tax,
+        "bankname" : props.data.bank,
+        "accnumber" : props.data.accnumber,
+        "ifsc" : props.data.ifsc
+   }
+  }
       axios.post(ServiceURL, requestOptions).then((res) => {
         if (res.data.errorCode === 1) {
           setAlertState('success');
@@ -86,10 +92,10 @@ export default function AddressChange(props) {
       />
       <TextField
         fullWidth
-        type="password"
+        type="text"
         label="VAT no"
         variant="outlined"
-        {...getFieldProps('repeatNewP')}
+        {...getFieldProps('tax')}
         error={Boolean(touched.repeatNewP && errors.repeatNewP)}
         helperText={touched.repeatNewP && errors.repeatNewP}
       />

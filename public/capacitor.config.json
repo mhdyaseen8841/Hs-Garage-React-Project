@@ -6,7 +6,7 @@
     "webDir": "build",
     "cordova": {},
     "server": {
-      "url": "http://192.168.1.39:3000",
+      "url": "https://c194-111-92-75-246.in.ngrok.io/garage/src/API/",
       "cleartext": true
     }
   }
