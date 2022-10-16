@@ -6,6 +6,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import Blog from './pages/Blog';
 import Customer from './pages/CustomerList';
 import Billing from './pages/customer/Billing';
+import Invoice from './pages/customer/Invoice';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
@@ -49,6 +50,7 @@ export default function Router() {
         {path:'users', element: <User /> },
         {path:'company', element: <Company /> },
         {path: 'billing', element: <Billing /> },
+        {path: 'invoice', element: <Invoice /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> }
       ],

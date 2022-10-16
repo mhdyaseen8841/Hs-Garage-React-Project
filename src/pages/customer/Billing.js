@@ -1,6 +1,8 @@
 import { Form } from 'formik'
 
 import { React, useState } from 'react';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
+
 // material
 import {
   TextField,
@@ -21,15 +23,26 @@ import {
   TableHead,
   MenuItem,
   Autocomplete,
-  OutlinedInput
+  OutlinedInput,
+  Select,
+  InputLabel,
+  FormControl,
+  Dialog
 } from '@mui/material';
 
 
 // components
 import Scrollbar from '../../components/Scrollbar';
 import Page from '../../components/Page';
+import Invoice from './Invoice';
 
 function Billing() {
+
+
+  const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
+  const data = useLocation();
+
   const [noOfRows, setNoOfRows] = useState(3);
   const top100Films = [
     {
@@ -51,16 +64,76 @@ const mm = String(today.getMonth() + 1).padStart(2, '0');
 const yyyy = today.getFullYear();
 const dte = `${yyyy}-${mm}-${dd}`;
 console.log(dte);
+
+
+  const [invoiceData, setInvoiceData] = useState({})
+ const createInvoice= ()=>{
+  console.log("createInvoice");
+  const servArr =[]
+  const itemArr =[]
+  const cname = document.getElementById("cname").value;
+  const invname = document.getElementById("invnum").value;
+  const date = document.getElementById("date").value;
+ 
+  [...Array(noOfRows)].map((elementInArray, ind) => {
+
+    if(document.getElementById(`item${ind}`).value !== "" ){
+      console.log(document.getElementById(`service${ind}`).innerHTML);
+      if(document.getElementById(`service${ind}`).innerHTML === "Item" ){
+
+        itemArr.push({
+          "item": document.getElementById(`item${ind}`).value,
+          "rate": document.getElementById(`price${ind}`).value,
+          "quantity": document.getElementById(`qty${ind}`).value,
+      
+        })
+      }else{
+
+        servArr.push({
+          "item": document.getElementById(`item${ind}`).value,
+          "rate": document.getElementById(`price${ind}`).value,
+          "quantity": document.getElementById(`qty${ind}`).value,
+      
+        })
+      }
+ 
+ 
+}
+return 0;
+  })
+
+
+
+
+ const invoice ={
+    "customer": cname,
+    "invoiceNum" : invname,
+    "date": date,
+    "items": itemArr,
+    "services": servArr
+  }
+  setInvoiceData(invoice)
+  console.log(invoice)
+  setOpen(true)
+  // navigate('/dashboard/Invoice',{state:invoice});
+
+}
+const onClose = () =>{
+  setOpen(false)
+}
   return (
     <Page title="Billing" /* sx={{ paddingTop: 2 }} */>
       <h1>Billing</h1>
+      <Dialog fullScreen open={open} onClose={onClose}>
+        <Invoice data={{state:invoiceData}} onclose={onClose}/>
+      </Dialog>
       <Container maxWidth="xl" mt={5}>
         <Stack direction="row" mb={2} justifyContent="space-between" pl={2} pr={2} /* alignItems="center" */ >
-          <TextField id="outlined-basic" label="Customer Name" style={{ width: '25%' }} variant="outlined" />
-          <TextField id="outlined-basic" label="invoice #" style={{ width: '25%' }} variant="outlined" />
+          <TextField id="cname" label="Customer Name" style={{ width: '25%' }} variant="outlined" />
+          <TextField id="invnum" label="invoice #" style={{ width: '25%' }} variant="outlined" />
         </Stack>
         <Stack direction="row" mb={2} justifyContent="flex-end" pl={2} pr={2} width={'100%'} /* alignItems="center"  */ >
-          <TextField type="date" id="outlined-basic" label="Issued Date" style={{ width: '25%' }} variant="outlined" value={dte} />
+          <TextField type="date" id="date" label="Issued Date" style={{ width: '25%' }} variant="outlined" value={dte} />
         </Stack>
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800 }}>
@@ -68,7 +141,9 @@ console.log(dte);
               <TableHead>
                 <TableRow>
                   <TableCell width={20} padding={0}>#</TableCell>
-                  <TableCell width={600} padding={0}>ITEM</TableCell>
+                  <TableCell width={400} padding={0}>ITEM</TableCell>
+                  <TableCell  padding={0}>Service / Item</TableCell>
+              
                   <TableCell padding={0}>QTY</TableCell>
                   <TableCell padding={0}>PRICE</TableCell>
                   <TableCell padding={0}>AMOUNT</TableCell>
@@ -82,7 +157,7 @@ console.log(dte);
                       <TableCell padding={0}>
                         <Autocomplete
                           freeSolo
-                          id={`itemcomplete${ind}`}
+                          id={`item${ind}`}
                           disableClearable
                           options={top100Films}
                           onChange={(event, value)=>{document.getElementById(`price${ind}`).value = value.rate; console.log(value);}}
@@ -98,6 +173,23 @@ console.log(dte);
                           )}
                         />
                       </TableCell>
+
+                       <TableCell padding={0}>
+                       <FormControl fullWidth>
+
+  <Select
+    id={`service${ind}`}
+    label="i"
+    defaultValue={1}
+  >
+    <MenuItem value={1}>Item</MenuItem>
+    <MenuItem value={2}>Service</MenuItem>
+  </Select>
+</FormControl>
+
+       
+   
+                        </TableCell>
                       <TableCell padding={0}>
                         <OutlinedInput type='number' id={`qty${ind}`} label="1" onChange={(e)=>{document.getElementById(`total${ind}`).value = document.getElementById(`price${ind}`).value * e.target.value}} />
                       </TableCell>
@@ -122,7 +214,7 @@ console.log(dte);
           <Stack mb={2} flexDirection={'col'}>
             <Typography variant='h6'>Grand Total</Typography>
             <Typography variant='h6'><b>{0}</b>  AED</Typography><br/>
-            <Button variant="contained">Create Invoice</Button>
+            <Button variant="contained" onClick={createInvoice} >Create Invoice</Button>
           </Stack>
           
         </Stack>
