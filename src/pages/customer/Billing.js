@@ -1,6 +1,6 @@
 import { Form } from 'formik'
-
-import { React, useState } from 'react';
+import axios from 'axios';
+import { React, useState,useEffect } from 'react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 
 // material
@@ -35,9 +35,10 @@ import {
 import Scrollbar from '../../components/Scrollbar';
 import Page from '../../components/Page';
 import Invoice from './Invoice';
+import ServiceURL from '../../constants/url';
 
 function Billing() {
-
+  
 
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
@@ -67,6 +68,30 @@ console.log(dte);
 
 
   const [invoiceData, setInvoiceData] = useState({})
+  const [userData, setUserData] = useState({})
+
+  useEffect(() => {
+    const requestdata =    {
+      "type" : "SP_CALL",
+   "requestId" : 1800006,
+       "request": {
+        "cmId" : data.state.cid
+      }
+}
+
+    
+     axios.post(ServiceURL,requestdata).then((res) => {
+      console.log(data.state.cid);
+      console.log(res);   
+      setUserData(res.data.result);
+      console.log(res.data);
+        }).catch(() => {
+            console.log('No internet connection found. App is running in offline mode.');
+      })
+    
+  }, [])
+  
+
  const createInvoice= ()=>{
   console.log("createInvoice");
   const servArr =[]
@@ -124,6 +149,8 @@ const onClose = () =>{
   return (
     <Page title="Billing" /* sx={{ paddingTop: 2 }} */>
       <h1>Billing</h1>
+      <h6>Vehicle number :{userData.number}</h6>
+      <h6>Vehicle model :{userData.model}</h6>
       <Dialog fullScreen open={open} onClose={onClose}>
         <Invoice data={{state:invoiceData}} onclose={onClose}/>
       </Dialog>
