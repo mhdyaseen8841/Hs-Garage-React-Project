@@ -21,6 +21,7 @@ import Profile from './pages/profile';
 import Settings from './pages/settings';
 import User from './pages/userList';
 import Company from './pages/company';
+import Bills from './pages/BillList';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -50,6 +51,7 @@ export default function Router() {
         {path:'users', element: <User /> },
         {path:'company', element: <Company /> },
         {path: 'billing', element: <Billing /> },
+        {path: 'bills', element: <Bills/>},
         {path: 'invoice', element: <Invoice /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> }

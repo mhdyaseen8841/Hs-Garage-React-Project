@@ -25,7 +25,7 @@ export function getNavConfig() {
       },
       {
         title: 'bill',
-        path: '/dashboard/bill',
+        path: '/dashboard/bills',
         icon: getIcon('icon-park-solid:bill'),
       },
       {

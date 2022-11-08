@@ -16,8 +16,10 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TablePagination
+  TablePagination,
+  Icon
 } from '@mui/material';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -118,7 +120,8 @@ export default function DashboardApp() {
     if (localStorage.getItem('userType') != null && localStorage.getItem('userType') === 'admin') {
       user = true;
     }
-  const dateChange = (date1, date2) => {
+  const dateChange = (date1, date2
+    ) => {
     const requestdata = {
       "type": "SP_CALL",
       "requestId": 6511353,
@@ -127,7 +130,6 @@ export default function DashboardApp() {
         "stopDate": date2.format("YYYY/MM/DD")
       }
     }
-    
     console.log(requestdata);
     requestPost(requestdata).then((res) => {
       console.log(res.data);
@@ -139,7 +141,7 @@ export default function DashboardApp() {
           res.data.result.chart.map((data) => {
             label.push(data.date)
             cdata.push(data.amount)
-            return data;
+            return data
           })
         }
         if (res.data.result.tableData[0] != null) {
@@ -305,9 +307,9 @@ export default function DashboardApp() {
                               </Label>
                             </TableCell>
 
-                            {/* <TableCell align="right"  >
-                              <UserMoreMenu callback={deleteUser} editUser={handleAdd} />
-                            </TableCell> */}
+                            <TableCell align="left"  >
+                              <ReceiptIcon style={{cursor:"pointer"}} onClick={()=>{alert(cmId)}} />
+                            </TableCell>
                           </TableRow>
                         );
                       })}
