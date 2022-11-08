@@ -54,6 +54,7 @@ const TABLE_HEAD = [
   { id: 'staff', label: 'staff', alignRight: false },
   { id: 'visitDate', label: 'visit Date', alignRight: false },
   { id: 'status', label: 'status', alignRight: false },
+  { id: 'status', label: 'Bill Generate', alignRight: false },
   { id: '' },
 ];
 
@@ -201,7 +202,9 @@ export default function DashboardApp() {
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+function billing (cmId){
+  navigate('/dashboard/billing', {state:{cid:cmId}})
+}
 
   return (
     <Page title="Dashboard">
@@ -307,9 +310,9 @@ export default function DashboardApp() {
                               </Label>
                             </TableCell>
 
-                            <TableCell align="left"  >
-                              <ReceiptIcon style={{cursor:"pointer"}} onClick={()=>{alert(cmId)}} />
-                            </TableCell>
+                            {/* <TableCell align="right"  >
+                              <UserMoreMenu callback={deleteUser} editUser={handleAdd} />
+                            </TableCell> */}
                           </TableRow>
                         );
                       })}
