@@ -54,7 +54,7 @@ const TABLE_HEAD = [
   { id: 'staff', label: 'staff', alignRight: false },
   { id: 'visitDate', label: 'visit Date', alignRight: false },
   { id: 'status', label: 'status', alignRight: false },
-  { id: 'status', label: 'Bill Generate', alignRight: false },
+  { id: 'bill', label: 'Bill', alignRight: false },
   { id: '' },
 ];
 
@@ -309,10 +309,12 @@ function billing (cmId){
                                 {status === 0 ? 'not completed' : 'completed'}
                               </Label>
                             </TableCell>
-
-                            {/* <TableCell align="right"  >
-                              <UserMoreMenu callback={deleteUser} editUser={handleAdd} />
-                            </TableCell> */}
+                            {status === 1 ?
+                            <TableCell align="right"  >
+                              <ReceiptIcon style={{cursor:"pointer"}} onClick={()=>{ navigate('/dashboard/billing',{state:{cid:cmId}}) }} />
+                            </TableCell> :
+                            ""
+                            }
                           </TableRow>
                         );
                       })}

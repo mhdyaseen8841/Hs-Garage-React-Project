@@ -45,20 +45,7 @@ function Billing() {
   const data = useLocation();
 
   const [noOfRows, setNoOfRows] = useState(3);
-  const top100Films = [
-    {
-      label: "Desktop PC",
-      rate: 10,
-    },
-    {
-      label: "Notebook",
-      rate: 25
-    },
-    {
-      label: "Monitor",
-      rate: 36
-    }
-  ]
+  const [items,setItems ] = useState([]);
   const today = new Date();
 const dd = String(today.getDate()).padStart(2, '0');
 const mm = String(today.getMonth() + 1).padStart(2, '0'); 
@@ -81,14 +68,25 @@ console.log(dte);
 
     
      axios.post(ServiceURL,requestdata).then((res) => {
-      console.log(data.state.cid);
-      console.log(res);   
       setUserData(res.data.result);
-      console.log(res.data);
         }).catch(() => {
             console.log('No internet connection found. App is running in offline mode.');
       })
-    
+
+
+      const requestdata2 =    {
+        "type" : "SP_CALL",
+     "requestId" : 2500001,
+         "request": {
+        }
+      }
+       axios.post(ServiceURL,requestdata2).then((res) => {
+        console.log(res.data.result);
+        setItems(res.data.result.map((value)=>{ return {label: value.itemName,rate : value.rate}}));
+          }).catch(() => {
+              console.log('No internet connection found. App is running in offline mode.');
+        })
+        
   }, [])
   
 
@@ -186,7 +184,7 @@ const onClose = () =>{
                           freeSolo
                           id={`item${ind}`}
                           disableClearable
-                          options={top100Films}
+                          options={items}
                           onChange={(event, value)=>{document.getElementById(`price${ind}`).value = value.rate; console.log(value);}}
                           renderInput={(params) => (
                             <TextField
@@ -239,8 +237,6 @@ const onClose = () =>{
 
         <Stack mb={2} flexDirection={'row'} justifyContent="flex-end" style={{ width: '100%' }}>
           <Stack mb={2} flexDirection={'col'}>
-            <Typography variant='h6'>Grand Total</Typography>
-            <Typography variant='h6'><b>{0}</b>  AED</Typography><br/>
             <Button variant="contained" onClick={createInvoice} >Create Invoice</Button>
           </Stack>
           
