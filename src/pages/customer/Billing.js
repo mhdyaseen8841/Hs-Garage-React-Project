@@ -45,6 +45,7 @@ function Billing() {
   const data = useLocation();
 
   const [noOfRows, setNoOfRows] = useState(3);
+  const [items, setItems] = useState([]);
   const top100Films = [
     {
       label: "Desktop PC",
@@ -70,7 +71,36 @@ console.log(dte);
   const [invoiceData, setInvoiceData] = useState({})
   const [userData, setUserData] = useState({})
 
+
+
+  const itemrequestdata = 
+  {
+    "type" : "SP_CALL",
+ "requestId" : 2500001,
+     "request": {
+}
+}
+
+      const getItem =()=>{
+        axios.post(ServiceURL,itemrequestdata).then((res) => {
+       if(res.data.errorCode === 1){
+       console.log(res.data.result);
+          setItems(res.data.result);
+       }
+       else{
+        setItems([]);
+       }
+        }).catch((error) => {
+          console.log(error);
+            console.log('No internet connection found. App is running in offline mode.');
+          });
+      }
+
+
   useEffect(() => {
+
+    getItem();
+
     const requestdata =    {
       "type" : "SP_CALL",
    "requestId" : 2100002,
@@ -96,6 +126,7 @@ console.log(dte);
 
   const generateBill = () => {
 
+    console.log(data.state.cid);
    const requestdata =    {
       "type" : "SP_CALL",
    "requestId" : 2100003,
