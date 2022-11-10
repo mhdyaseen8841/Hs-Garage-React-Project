@@ -74,9 +74,9 @@ console.log(servArr);
           <Table dataSource={servArr} 
             pagination={false}
           >
-            <Table.Column title="Items" dataIndex='item' />
-            <Table.Column title="Quantity" dataIndex='quantity' />
-            <Table.Column title="Price" dataIndex='rate' />
+            <Table.Column title="Items" dataIndex='service' />
+            <Table.Column title="Quantity" dataIndex='qty' />
+            <Table.Column title="Price" dataIndex='price' />
             <Table.Column title="Line Total" />
           </Table>
         </Row>
@@ -93,10 +93,10 @@ console.log(servArr);
           <Table dataSource={itemArr}
             pagination={false}
           >
-            <Table.Column title="Items" dataIndex='item' />
+            <Table.Column title="Items" dataIndex='service' />
             
-            <Table.Column title="Quantity" dataIndex='quantity' />
-            <Table.Column title="Price" dataIndex='rate' />
+            <Table.Column title="Quantity" dataIndex='qty' />
+            <Table.Column title="Price" dataIndex='price' />
             <Table.Column title="Line Total" />
           </Table>
         </Row>

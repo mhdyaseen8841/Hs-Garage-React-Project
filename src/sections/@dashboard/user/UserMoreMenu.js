@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState,useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 // material
@@ -15,7 +15,7 @@ export default function UserMoreMenu(props) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
-
+const [edit, editdetails] = useState(true)
 
   const deletereq = () => {
     setIsOpen(false);
@@ -23,10 +23,17 @@ export default function UserMoreMenu(props) {
   }
 
   const edituser = () => {
-    console.log("------------------------------------");
+  
     setIsOpen(false);
     props.editUser();
   }
+  useEffect(() => {
+if(props.editUser==='noedit'){
+  editdetails(false)
+ 
+}
+  })
+
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -49,14 +56,20 @@ export default function UserMoreMenu(props) {
           </ListItemIcon>
           <ListItemText onClick={deletereq} primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
-
-        <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
+ 
+ {edit ? (
+  <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
           </ListItemIcon>
           <ListItemText onClick={edituser} primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
-      </Menu>
+
+ ): null}
+
+
+
+</Menu>
     </>
   );
 }

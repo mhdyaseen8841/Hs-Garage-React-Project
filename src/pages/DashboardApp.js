@@ -307,10 +307,10 @@ function billing (cmId){
                                 {status === 0 ? 'not completed' : 'completed'}
                               </Label>
                             </TableCell>
-                            <TableCell align="left" onClick={()=>{
+                            <TableCell align="left"  onClick={()=>{
                                navigate('/dashboard/billing', {state:{cid:cmId}})
                             }} >
-                            <Label variant="ghost" color={'success'}>
+                            <Label sx={{cursor: "pointer"}} variant="ghost" color={'success'}>
                                Generate Bill
                               </Label>
                             </TableCell>

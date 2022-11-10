@@ -16,6 +16,8 @@ import DashboardApp from './pages/DashboardApp';
 import CustomerDetails  from './pages/VehicleList'
 import VehicleDetails from './pages/ComplaintList'
 import AddComplaint from './pages/vehicle/AddComplaint';
+
+import ItemsList from './pages/Items/ItemsList';
 import ComplaintDetails from './pages/vehicle/ComplaintDetails';
 import Profile from './pages/profile';
 import Settings from './pages/settings';
@@ -47,6 +49,7 @@ export default function Router() {
         { path: 'settings', element: <Settings /> },
         {path:'VehicleDetails', element: <VehicleDetails/> },
         {path:'complaintDetails', element: <ComplaintDetails/> },
+        {path:'itemDetails', element: <ItemsList/> },
         {path:'users', element: <User /> },
         {path:'company', element: <Company /> },
         {path: 'billing', element: <Billing /> },
