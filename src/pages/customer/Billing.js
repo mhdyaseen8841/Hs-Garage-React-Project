@@ -108,7 +108,6 @@ console.log(dte);
           "item": document.getElementById(`item${ind}`).value,
           "rate": document.getElementById(`price${ind}`).value,
           "quantity": document.getElementById(`qty${ind}`).value,
-      
         })
       }else{
 
@@ -167,7 +166,7 @@ const onClose = () =>{
                 <TableRow>
                   <TableCell width={20} padding={0}>#</TableCell>
                   <TableCell width={400} padding={0}>ITEM</TableCell>
-                  <TableCell  padding={0}>Service / Item</TableCell>
+                  <TableCell  padding={0}>Service/Item</TableCell>
               
                   <TableCell padding={0}>QTY</TableCell>
                   <TableCell padding={0}>PRICE</TableCell>
@@ -216,7 +215,7 @@ const onClose = () =>{
    
                         </TableCell>
                       <TableCell padding={0}>
-                        <OutlinedInput type='number' id={`qty${ind}`} label="1" onChange={(e)=>{document.getElementById(`total${ind}`).value = document.getElementById(`price${ind}`).value * e.target.value}} />
+                        <OutlinedInput type='number' id={`qty${ind}`} label="1" defaultValue={1} onChange={(e)=>{document.getElementById(`total${ind}`).value = document.getElementById(`price${ind}`).value * e.target.value}} />
                       </TableCell>
                       <TableCell padding={0}>
                         <OutlinedInput type='number' id={`price${ind}`} endAdornment={<InputAdornment position="end">AED</InputAdornment>}  label="1" inputProps={{min: 0, style: { textAlign: 'right' }}}  onChange={(e)=>{document.getElementById(`total${ind}`).value = document.getElementById(`qty${ind}`).value * e.target.value}}/>

@@ -127,7 +127,7 @@ export default function LoginForm() {
     <FormikProvider value={formik}>
       {alert}
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack spacing={4}>
+        <Stack spacing={2}>
           <TextField
             fullWidth
             autoComplete="username"
@@ -157,11 +157,7 @@ export default function LoginForm() {
           />
         </Stack>
 
-        <Stack direction="row" alignItems="right" justifyContent="space-between" sx={{ my: 1 }}>
-          <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
-            Forgot password?
-          </Link>
-        </Stack>
+        <Stack direction="row" alignItems="right" justifyContent="space-between" sx={{ my: 2 }} />
 
         <LoadingButton
           fullWidth

@@ -229,7 +229,7 @@ function billing (cmId){
             <Typography variant="h6" sx={{ mb: 5 }}>
               Search Dates
             </Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs} >
+            <LocalizationProvider dateAdapter={AdapterDayjs}  >
               <DatePicker
                 disableFuture
                 label="FROM"
@@ -240,6 +240,7 @@ function billing (cmId){
                   dateChange(newValue, stopdate);
                 }}
                 renderInput={(params) => <TextField {...params} />}
+                
               />
               <DatePicker
                 disableFuture

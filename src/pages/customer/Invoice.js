@@ -70,7 +70,7 @@ console.log(servArr);
           </Col>
         </Row>
 
-        <Row >
+        <Row width={100}>
           <Table dataSource={servArr} 
             pagination={false}
           >
