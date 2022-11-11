@@ -59,33 +59,11 @@ console.log(dte);
 
 
 
-  const itemrequestdata = 
-  {
-    "type" : "SP_CALL",
- "requestId" : 2500001,
-     "request": {
-}
-}
-
-      const getItem =()=>{
-        axios.post(ServiceURL,itemrequestdata).then((res) => {
-       if(res.data.errorCode === 1){
-       console.log(res.data.result);
-          setItems(res.data.result);
-       }
-       else{
-        setItems([]);
-       }
-        }).catch((error) => {
-          console.log(error);
-            console.log('No internet connection found. App is running in offline mode.');
-          });
-      }
 
 
   useEffect(() => {
 
-    getItem();
+
 
     const requestdata =    {
       "type" : "SP_CALL",
