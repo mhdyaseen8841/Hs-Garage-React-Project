@@ -32,6 +32,11 @@ export function getNavConfig() {
         title: 'users',
         path: '/dashboard/users',
         icon: getIcon('carbon:user-filled')
+      },
+      {
+        title: 'items',
+        path: '/dashboard/items',
+        icon: getIcon('ant-design:ordered-list-outlined')
       }
     )
   }

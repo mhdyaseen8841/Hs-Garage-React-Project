@@ -310,12 +310,12 @@ function billing (cmId){
                                 {status === 0 ? 'not completed' : 'completed'}
                               </Label>
                             </TableCell>
-                            <TableCell align="left"  onClick={()=>{
+                            <TableCell align="left"  >
+                            {status === 1 ?
+                            <ReceiptIcon style={{cursor:'pointer'}}  onClick={()=>{
                                navigate('/dashboard/billing', {state:{cid:cmId}})
-                            }} >
-                            <Label sx={{cursor: "pointer"}} variant="ghost" color={'success'}>
-                               Generate Bill
-                              </Label>
+                            }}/> : ''
+                            }
                             </TableCell>
                             {/* <TableCell align="right"  >
                               <UserMoreMenu callback={deleteUser} editUser={handleAdd} />

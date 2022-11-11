@@ -1,16 +1,12 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
-import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
-import Blog from './pages/Blog';
 import Customer from './pages/CustomerList';
 import Billing from './pages/customer/Billing';
 import Invoice from './pages/customer/Invoice';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
-import Register from './pages/Register';
-import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 // import CustomerDetails from './pages/CustomerDetails'
 import CustomerDetails  from './pages/VehicleList'
@@ -50,7 +46,7 @@ export default function Router() {
         { path: 'settings', element: <Settings /> },
         {path:'VehicleDetails', element: <VehicleDetails/> },
         {path:'complaintDetails', element: <ComplaintDetails/> },
-        {path:'itemDetails', element: <ItemsList/> },
+        {path:'items', element: <ItemsList/> },
         {path:'users', element: <User /> },
         {path:'company', element: <Company /> },
         {path: 'billing', element: <Billing /> },
