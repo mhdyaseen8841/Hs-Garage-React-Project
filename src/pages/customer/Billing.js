@@ -57,10 +57,17 @@ console.log(dte);
   const [invoiceData, setInvoiceData] = useState({})
   const [userData, setUserData] = useState({})
 
+
+
+
+
   useEffect(() => {
+
+
+
     const requestdata =    {
       "type" : "SP_CALL",
-   "requestId" : 1800006,
+   "requestId" : 2100002,
        "request": {
         "cmId" : data.state.cid
       }
@@ -89,13 +96,44 @@ console.log(dte);
         
   }, [])
   
-
- const createInvoice= ()=>{
-  console.log("createInvoice");
   const servArr =[]
   const itemArr =[]
+  let bills = []
+
+  const generateBill = () => {
+
+    console.log(data.state.cid);
+   const requestdata =    {
+      "type" : "SP_CALL",
+   "requestId" : 2100003,
+       "request": {
+  "cmId":data.state.cid,
+ "bills" : bills
+      }
+    }
+
+console.log("bill generation");
+console.log(requestdata);
+
+    axios.post(ServiceURL,requestdata).then((res) => {
+
+      console.log(res);
+    }).catch(() => {
+      console.log('No internet connection found. App is running in offline mode.');
+
+
+    })
+
+  }
+
+ const createInvoice= ()=>{
+
+ 
+  
+  console.log("createInvoice");
+ 
   const cname = document.getElementById("cname").value;
-  const invname = document.getElementById("invnum").value;
+  const invnum = document.getElementById("invnum").value;
   const date = document.getElementById("date").value;
  
   [...Array(noOfRows)].map((elementInArray, ind) => {
@@ -105,31 +143,36 @@ console.log(dte);
       if(document.getElementById(`service${ind}`).innerHTML === "Item" ){
 
         itemArr.push({
-          "item": document.getElementById(`item${ind}`).value,
-          "rate": document.getElementById(`price${ind}`).value,
-          "quantity": document.getElementById(`qty${ind}`).value,
+          "service": document.getElementById(`item${ind}`).value,
+          "serviceType": "0",
+          "qty": document.getElementById(`qty${ind}`).value,
+          "price": document.getElementById(`price${ind}`).value,
+      
         })
       }else{
 
         servArr.push({
-          "item": document.getElementById(`item${ind}`).value,
-          "rate": document.getElementById(`price${ind}`).value,
-          "quantity": document.getElementById(`qty${ind}`).value,
+          "service": document.getElementById(`item${ind}`).value,
+          "serviceType": "1",
+          "qty": document.getElementById(`qty${ind}`).value,
+          "price": document.getElementById(`price${ind}`).value,
       
         })
       }
- 
+
  
 }
 return 0;
   })
+  bills =itemArr.concat(servArr);
 
 
 
+  generateBill();
 
  const invoice ={
     "customer": cname,
-    "invoiceNum" : invname,
+    "invoiceNum" : invnum,
     "date": date,
     "items": itemArr,
     "services": servArr
@@ -146,14 +189,13 @@ const onClose = () =>{
   return (
     <Page title="Billing" /* sx={{ paddingTop: 2 }} */>
       <h1>Billing</h1>
-      <h6>Vehicle number :{userData.number}</h6>
-      <h6>Vehicle model :{userData.model}</h6>
+      <h6>Vehicle number :{userData.vehicleNumber}</h6>
       <Dialog fullScreen open={open} onClose={onClose}>
         <Invoice data={{state:invoiceData}} onclose={onClose}/>
       </Dialog>
       <Container maxWidth="xl" mt={5}>
         <Stack direction="row" mb={2} justifyContent="space-between" pl={2} pr={2} /* alignItems="center" */ >
-          <TextField id="cname" label="Customer Name" style={{ width: '25%' }} variant="outlined" />
+          <TextField id="cname"  defaultValue={userData.name}    style={{ width: '25%' }} variant="outlined" />
           <TextField id="invnum" label="invoice #" style={{ width: '25%' }} variant="outlined" />
         </Stack>
         <Stack direction="row" mb={2} justifyContent="flex-end" pl={2} pr={2} width={'100%'} /* alignItems="center"  */ >

@@ -310,12 +310,16 @@ function billing (cmId){
                                 {status === 0 ? 'not completed' : 'completed'}
                               </Label>
                             </TableCell>
-                            {status === 1 ?
-                            <TableCell align="right"  >
-                              <ReceiptIcon style={{cursor:"pointer"}} onClick={()=>{ navigate('/dashboard/billing',{state:{cid:cmId}}) }} />
-                            </TableCell> :
-                            ""
-                            }
+                            <TableCell align="left"  onClick={()=>{
+                               navigate('/dashboard/billing', {state:{cid:cmId}})
+                            }} >
+                            <Label sx={{cursor: "pointer"}} variant="ghost" color={'success'}>
+                               Generate Bill
+                              </Label>
+                            </TableCell>
+                            {/* <TableCell align="right"  >
+                              <UserMoreMenu callback={deleteUser} editUser={handleAdd} />
+                            </TableCell> */}
                           </TableRow>
                         );
                       })}
