@@ -137,10 +137,7 @@ const [user,username] = useState("username");
   useEffect(() => {
     displayComplaints();
      
-    if(data.state==="add"){
-      handleAdd()
-     }
-      
+  
    
   }, [])
 
