@@ -122,9 +122,7 @@ export default function CustomerDetails() {
       
   useEffect(() => {
     display();
-   if(data.state==="add"){
-    handleAdd()
-   }
+  
     
    
     
