@@ -34,7 +34,7 @@ import {
 // components
 import Scrollbar from '../../components/Scrollbar';
 import Page from '../../components/Page';
-import Invoice from './Invoice';
+import Invoice from './Invoices';
 import ServiceURL from '../../constants/url';
 
 function Billing() {
