@@ -17,7 +17,11 @@ import {
   TableCell,
   TableContainer,
   TablePagination,
-  Icon
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  Button
 } from '@mui/material';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -96,7 +100,7 @@ export default function DashboardApp() {
 
   const [USERLIST, setUserList] = useState([]);
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const [addDialog, setDialog] = useState();
 
@@ -117,6 +121,9 @@ export default function DashboardApp() {
   const [counts, setCounts] = useState({});
   const [chartData, setChartData] = useState([]);
   const [chartlabel, setChartLable] = useState([]);
+
+  const [remark, setremark] = useState("");
+  const [cmid, setcmid] = useState();
   let user = false;
     if (localStorage.getItem('userType') != null && localStorage.getItem('userType') === 'admin') {
       user = true;
@@ -205,9 +212,66 @@ export default function DashboardApp() {
 function billing (cmId){
   navigate('/dashboard/billing', {state:{cid:cmId}})
 }
-
+const billGen = (remark1,cmId) => {
+  setremark(remark1);
+  setcmid(cmId);
+  setOpen(true);
+  
+}
+const handleSubmit = () =>{
+  const requestData = {
+    "type": "SP_CALL",
+    "requestId": 6511355,
+    "request": {
+      "cmId" : cmid,
+      "remark" : remark
+    }
+  }
+  requestPost(requestData).then((res) => {
+    if (res.data.errorCode === 1) {
+      setOpen(false);
+      navigate('/dashboard/billing', {state:{cid:cmid}});
+    }
+  })
+  .catch(
+    (error) =>{
+      console.log(error);
+    }
+  )
+}
+const handleSkip = () =>{
+  setOpen(false);
+  navigate('/dashboard/billing', {state:{cid:cmid}});
+}
   return (
     <Page title="Dashboard">
+      <Dialog open={open} fullWidth>
+          <DialogTitle>Remark</DialogTitle>
+          <DialogContent>
+          <Stack spacing={1} justifyContent="space-between" sx={{ my: 3 }}>
+      <TextField
+        fullWidth
+        type="text"
+        label="remark"
+        variant="outlined"
+        value={remark} 
+        onChange={(e)=>{setremark(e.target.value)}}
+      />
+      <Stack direction='row' justifyContent="right" sx={{ my: 3 }}>
+      <Button autoFocus color="error" onClick={()=>{ setOpen(false) }}>
+        Cancel
+      </Button>
+      <Button autoFocus color="info" onClick={handleSkip}>
+        Skip
+      </Button>
+      <Button autoFocus color="success" onClick={handleSubmit}>
+        Save
+      </Button>
+      
+      </Stack>
+    </Stack>
+          </DialogContent>
+        </Dialog>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
@@ -286,7 +350,7 @@ function billing (cmId){
                     />
                     <TableBody>
                       {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                        const { username, name, mobile, address, vnumber, vdate, status, cmId } = row;
+                        const { username, name, mobile, address, vnumber, vdate, status, cmId, remark2 } = row;
                         // const title = name;
                         //  const isItemSelected = selected.indexOf(name) !== -1;
                         return (
@@ -313,7 +377,8 @@ function billing (cmId){
                             <TableCell align="left"  >
                             {status === 1 ?
                             <ReceiptIcon style={{cursor:'pointer'}}  onClick={()=>{
-                               navigate('/dashboard/billing', {state:{cid:cmId}})
+                              billGen(remark2,cmId);
+                               // navigate('/dashboard/billing', {state:{cid:cmId}})
                             }}/> : ''
                             }
                             </TableCell>
