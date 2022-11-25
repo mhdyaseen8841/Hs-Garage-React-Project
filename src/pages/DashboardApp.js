@@ -122,7 +122,7 @@ export default function DashboardApp() {
   const [chartData, setChartData] = useState([]);
   const [chartlabel, setChartLable] = useState([]);
 
-  const [remark, setremark] = useState("");
+  const [remarks, setremark] = useState("");
   const [cmid, setcmid] = useState();
   let user = false;
     if (localStorage.getItem('userType') != null && localStorage.getItem('userType') === 'admin') {
@@ -218,16 +218,17 @@ const billGen = (remark1,cmId) => {
   setOpen(true);
   
 }
-const handleSubmit = () =>{
+const genBill = () =>{
   const requestData = {
     "type": "SP_CALL",
     "requestId": 6511355,
     "request": {
       "cmId" : cmid,
-      "remark" : remark
+      "remark" : remarks
     }
   }
   requestPost(requestData).then((res) => {
+    console.log(res.data);
     if (res.data.errorCode === 1) {
       setOpen(false);
       navigate('/dashboard/billing', {state:{cid:cmid}});
@@ -239,9 +240,38 @@ const handleSubmit = () =>{
     }
   )
 }
+const billstatus = () => {
+  const requestData = {
+    "type": "SP_CALL",
+    "requestId": 2100002,
+    "request": {
+      "cmId" : cmid
+    }
+  }
+  requestPost(requestData).then((res) => {
+    console.log(res.data);
+    if(res.data.errorcode === 1){
+      if(res.data.result.billStatus === "0"){
+        genBill();
+      }
+      else{
+        // already bill generated;
+      }
+    }
+  })
+  .catch(
+    (error) =>{
+      console.log(error);
+    }
+  )
+}
+const handleSubmit = () =>{
+  billstatus();
+}
 const handleSkip = () =>{
   setOpen(false);
-  navigate('/dashboard/billing', {state:{cid:cmid}});
+  billstatus();
+  // navigate('/dashboard/billing', {state:{cid:cmid}}); 
 }
   return (
     <Page title="Dashboard">
@@ -254,7 +284,7 @@ const handleSkip = () =>{
         type="text"
         label="remark"
         variant="outlined"
-        value={remark} 
+        value={remarks}
         onChange={(e)=>{setremark(e.target.value)}}
       />
       <Stack direction='row' justifyContent="right" sx={{ my: 3 }}>
@@ -267,7 +297,6 @@ const handleSkip = () =>{
       <Button autoFocus color="success" onClick={handleSubmit}>
         Save
       </Button>
-      
       </Stack>
     </Stack>
           </DialogContent>
@@ -350,7 +379,7 @@ const handleSkip = () =>{
                     />
                     <TableBody>
                       {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                        const { username, name, mobile, address, vnumber, vdate, status, cmId, remark2 } = row;
+                        const { username, name, mobile, address, vnumber, vdate, status, cmId, remark } = row;
                         // const title = name;
                         //  const isItemSelected = selected.indexOf(name) !== -1;
                         return (
@@ -377,7 +406,7 @@ const handleSkip = () =>{
                             <TableCell align="left"  >
                             {status === 1 ?
                             <ReceiptIcon style={{cursor:'pointer'}}  onClick={()=>{
-                              billGen(remark2,cmId);
+                              billGen(remark,cmId);
                                // navigate('/dashboard/billing', {state:{cid:cmId}})
                             }}/> : ''
                             }
