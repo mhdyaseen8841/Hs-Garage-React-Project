@@ -47,7 +47,7 @@ import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
-
+import Invoice from './customer/Invoices';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -102,11 +102,15 @@ export default function DashboardApp() {
 
   const [open, setOpen] = useState(false);
 
+  const [openInvoice, setOpenInvoice] = useState(false);
+
   const [addDialog, setDialog] = useState();
 
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
+
+  const [invoiceData, setInvoiceData] = useState({})
 
   const [selected, setSelected] = useState([]);
 
@@ -124,6 +128,9 @@ export default function DashboardApp() {
 
   const [remarks, setremark] = useState("");
   const [cmid, setcmid] = useState();
+
+
+  
   let user = false;
     if (localStorage.getItem('userType') != null && localStorage.getItem('userType') === 'admin') {
       user = true;
@@ -257,6 +264,8 @@ const billstatus = () => {
       }
       else{
         // already bill generated;
+        setOpen(false);
+        setOpenInvoice(true);
       }
     }
   })
@@ -267,6 +276,7 @@ const billstatus = () => {
   )
 }
 const handleSubmit = () =>{
+  console.log("handle submit");
   billstatus();
 }
 const handleSkip = () =>{
@@ -274,6 +284,12 @@ const handleSkip = () =>{
   billstatus();
   // navigate('/dashboard/billing', {state:{cid:cmid}}); 
 }
+
+
+const onClose = () => {
+  setOpenInvoice(false)
+}
+
   return (
     <Page title="Dashboard">
       <Dialog open={open} fullWidth>
@@ -302,6 +318,12 @@ const handleSkip = () =>{
     </Stack>
           </DialogContent>
         </Dialog>
+
+
+        <Dialog fullScreen open={openInvoice} onClose={onClose}>
+        <Invoice data={{ state: cmid }} onclose={onClose} />
+      </Dialog>
+      
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back

@@ -1,26 +1,125 @@
-import{ React, useState }from "react";
+import{ React, useState,useEffect }from "react";
 import { render } from "react-dom";
 import './invoice.css';
 
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
-
+import requestPost from '../../serviceWorker';
 import 'antd/dist/antd.css';
 
 const Invoices = (data) => {
 
 
   // const [service, setServ] = useState([])
-  
-
-const servArr = data.data.state.services
-const itemArr = data.data.state.items
-console.log(servArr);
+  const [invoiceData, setInvoiceData] = useState('')
+  const [servArr, setservArr] = useState([])
+  const [itemArr, setitemArr] = useState([])
+  const [invNO, setInvNo] = useState('')
+  const [date, setDate] = useState('')
+  const [sumvalue,setSum] = useState(0)
+  const [company,setCompany] = useState('')
+// const servArr = data.data.state.services
+// const itemArr = data.data.state.items
+// console.log(servArr);
   const printdoc=()=>{
   
     document.getElementById("printbutton").style.display="none";
    window.print()
    data.onclose()
   }
+
+
+let sum=0;
+  useEffect(() => {
+
+const rdata =	{
+		"type" : "SP_CALL",
+	 "requestId" : 2400005,
+		 "request": {
+ }
+  }
+ 
+  requestPost(rdata).then((res) => {
+
+	setCompany(res.data.result)
+  }).catch(() => {
+  
+console.log('No internet connection found. App is running in offline mode.');
+})
+	
+	const requestData = {
+		"type": "SP_CALL",
+		"requestId": 2100002,
+		"request": {
+		  "cmId" : data.data.state
+		}
+	  }
+
+	  requestPost(requestData).then((res) => {
+
+setInvoiceData(res.data.result)
+console.log(res.data.result);
+setInvNo(res.data.result.bill.invoiceNo)
+setDate(res.data.result.bill.date)
+if(res.data.result.bill.items[0]!==null){
+console.log('sdfasd');
+	setitemArr(res.data.result.bill.items)
+	const arritem=res.data.result.bill.items;
+	let i;
+	let rate
+	let qty
+	
+	for ( i = 0; i < arritem.length; i+=1 ) {
+		console.log(arritem[i]);
+		 rate=parseInt(arritem[i].price,10);
+		 console.log("rate=");
+		 console.log(rate); 
+		 qty=parseInt(arritem[i].qty,10);
+		sum += rate*qty;
+		console.log(qty);
+		console.log(sum);
+
+	} 
+	
+	}else{
+		
+		setitemArr([])
+	}
+	
+	if(res.data.result.bill.services[0]!==null){
+	setservArr(res.data.result.bill.services)
+
+
+	const arritem=res.data.result.bill.services;
+	let i;
+	let rate
+	let qty
+	
+	for ( i = 0; i < arritem.length; i+=1 ) {
+		console.log(arritem[i]);
+		 rate=parseInt(arritem[i].price,10);
+		 console.log("rate=");
+		 console.log(rate); 
+		 qty=parseInt(arritem[i].qty,10);
+		sum += rate*qty;
+		console.log(qty);
+		console.log(sum);
+
+	} 
+	
+	}else{
+		setservArr([])
+	}
+	setSum(sum)
+	  }).catch(() => {
+
+		console.log('No internet connection found. App is running in offline mode.');
+	  })
+	
+  }, [])
+  
+
+
+
   return (
     <>
  
@@ -37,40 +136,37 @@ console.log(servArr);
 				</div>
 
 				<div className="col-sm-6 top-right">
-						<h3 className="marginright">INVOICE-{data.data.state.invoiceNum}</h3>
-						<span className="marginright">{data.data.state.date}</span>
+						<h3 className="marginright">INVOICE NO-  {invNO} </h3>
+						<span className="marginright">{date}</span>
 			    </div>
 
 			</div>
 			<hr/>
 			<div className="row">
 
-				<div className="col-md-4 from">
-					<p className="lead marginbottom">From : HS Garage</p>
-					<p>350 Rhode Island Street</p>
+				<div className="col-md-6 from">
+					<p className="lead marginbottom">From : {company.name}</p>
+					<p>{company.address}</p>
 					
-					<p>California, 94103</p>
-					<p>Phone: 415-767-3600</p>
-					<p>Email: contact@dynofy.com</p>
+					<p>{company.city}</p>
+					<p>Phone: {company.mobile}</p>
+					<p>Email: {company.email}</p>
 				</div>
 
-				<div className="col-md-4 to">
-					<p className="lead marginbottom">To : {data.data.state.customer}</p>
-					<p>425 Market Street</p>
-        
-					<p>California, 94105</p>
-					<p>Phone: 415-676-3600</p>
-					<p>Email: john@doe.com</p>
+				<div className="col-md-6 to ">
+					<p className="lead marginbottom">To : {invoiceData.name} </p>
+					<p>Vehicle no: {invoiceData.vehicleNumber}</p>
+					<p>Address: {invoiceData.address}</p>
+					<p>Phone: {invoiceData.mobile}</p>
+					
 
 			    </div>
 
-			    <div className="col-md-4 text-right payment-details">
+			    {/* <div className="col-md-4 text-right payment-details">
 					<p className="lead marginbottom payment-info">Payment details</p>
 					<p>Date: 14 April 2014</p>
-					<p>VAT: DK888-777 </p>
-					<p>Total Amount: $1019</p>
-					<p>Account Name: Flatter</p>
-			    </div>
+					
+			    </div> */}
 
 			</div>
 
@@ -91,11 +187,12 @@ console.log(servArr);
 			      <tbody>
                     {itemArr.map((item, index) => (
                         <tr>
-                        <td className="text-center">{index}</td>
+                        <td className="text-center">{index+1}</td>
                         <td>{item.service}</td>
                         <td className="text-right">{item.qty}</td>
                         <td className="text-right">AED {item.price}</td>
                         <td className="text-right">AED {item.qty*item.price}</td>
+						
                       </tr>
                     ))}
 			        
@@ -105,7 +202,7 @@ console.log(servArr);
 
 			</div>
             </div>
-: null}
+ : null} 
 
 
 
@@ -126,7 +223,7 @@ console.log(servArr);
 			      <tbody>
                     {servArr.map((item, index) => (
                         <tr>
-                        <td className="text-center">{index}</td>
+                        <td className="text-center">{index+1}</td>
                         <td>{item.service}</td>
                         <td className="text-right">{item.qty}</td>
                         <td className="text-right">AED{item.price}</td>
@@ -141,7 +238,7 @@ console.log(servArr);
 			</div>
             </div>
 
-: null}
+ : null} 
 			<div className="row">
 			<div className="col-md-6 margintop">
 				<p className="lead marginbottom">THANK YOU!</p>
@@ -150,10 +247,9 @@ console.log(servArr);
 				{/* <button className="btn btn-danger"><i className="fa fa-envelope-o"/>Mail Invoice</button> */}
 			</div>
 			<div className="col-md-6 text-right pull-right invoice-total">
-					  <p>Subtotal : $1019</p>
-			          <p>Discount (10%) : $101 </p>
-			          <p>VAT (8%) : $73 </p>
-			          <p>Total : $991 </p>
+					  
+			          
+			          <p>Total : {sumvalue} </p>
 			</div>
 			</div>
 
