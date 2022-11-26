@@ -258,7 +258,7 @@ if(res.data.result.bill.items[0]!==null){
 			<div className="col-md-6 text-right pull-right invoice-total">
 					  
 			          
-			          <p>Total : {sumvalue} </p>
+			          <b className="pt-2">Total : {sumvalue} </b>
 			</div>
 			</div>
 
