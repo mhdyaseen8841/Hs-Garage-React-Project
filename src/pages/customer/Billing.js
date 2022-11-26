@@ -57,13 +57,14 @@ function Billing() {
   const [invoiceData, setInvoiceData] = useState({})
   const [userData, setUserData] = useState({})
 
+  const [cmid, setcmid] = useState();
 
 
 
 
   useEffect(() => {
 
-
+setcmid(data.state.cid)
 
     const requestdata = {
       "type": "SP_CALL",
@@ -132,9 +133,8 @@ function Billing() {
 
     console.log("createInvoice");
 
-    const cname = document.getElementById("cname").value;
-    const invnum = document.getElementById("invnum").value;
-    const date = document.getElementById("date").value;
+   
+   
 
     [...Array(noOfRows)].map((elementInArray, ind) => {
 
@@ -169,15 +169,7 @@ function Billing() {
 
     generateBill();
 
-    const invoice = {
-      "customer": cname,
-      "invoiceNum": invnum,
-      "date": date,
-      "items": itemArr,
-      "services": servArr
-    }
-    setInvoiceData(invoice)
-    console.log(invoice)
+   
     setOpen(true)
     // navigate('/dashboard/Invoice',{state:invoice});
 
@@ -190,13 +182,13 @@ function Billing() {
       <h1>Billing</h1>
       <h6>Vehicle number :{userData.vehicleNumber}</h6>
       <Dialog fullScreen open={open} onClose={onClose}>
-        <Invoice data={{ state: invoiceData }} onclose={onClose} />
+        <Invoice  data={{ state: cmid }} onclose={onClose} />
       </Dialog>
       <Container maxWidth="xl" mt={5}>
-        <Stack direction="row" mb={2} justifyContent="space-between" pl={2} pr={2} /* alignItems="center" */ >
+       {/* <Stack direction="row" mb={2} justifyContent="space-between" pl={2} pr={2}  alignItems="center" >
           <TextField id="cname" defaultValue={userData.name} style={{ width: '25%' }} variant="outlined" />
           <TextField id="invnum" label="invoice #" style={{ width: '25%' }} variant="outlined" />
-        </Stack>
+        </Stack>  */}
         <Stack direction="row" mb={2} justifyContent="flex-end" pl={2} pr={2} width={'100%'} /* alignItems="center"  */ >
           <TextField type="date" id="date" label="Issued Date" style={{ width: '25%' }} variant="outlined" value={dte} />
         </Stack>
