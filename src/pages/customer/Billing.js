@@ -120,16 +120,10 @@ function Billing() {
       console.log(res);
     }).catch(() => {
       console.log('No internet connection found. App is running in offline mode.');
-
-
     })
-
   }
 
   const createInvoice = () => {
-
-
-
     console.log("createInvoice");
 
     const cname = document.getElementById("cname").value;
