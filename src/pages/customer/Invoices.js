@@ -6,6 +6,7 @@ import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import requestPost from '../../serviceWorker';
 import 'antd/dist/antd.css';
 
+
 const Invoices = (data) => {
 
 
@@ -17,6 +18,7 @@ const Invoices = (data) => {
   const [date, setDate] = useState('')
   const [sumvalue,setSum] = useState(0)
   const [company,setCompany] = useState('')
+  const [imgPop, setimgPop] = useState();
 // const servArr = data.data.state.services
 // const itemArr = data.data.state.items
 // console.log(servArr);
@@ -41,6 +43,9 @@ const rdata =	{
   requestPost(rdata).then((res) => {
 
 	setCompany(res.data.result)
+
+	setimgPop(res.data.result.logo)
+	console.log(res.data.result);
   }).catch(() => {
   
 console.log('No internet connection found. App is running in offline mode.');
@@ -61,7 +66,7 @@ console.log(res.data.result);
 setInvNo(res.data.result.bill.invoiceNo)
 setDate(res.data.result.bill.date)
 if(res.data.result.bill.items[0]!==null){
-console.log('sdfasd');
+
 	setitemArr(res.data.result.bill.items)
 	const arritem=res.data.result.bill.items;
 	let i;
@@ -69,14 +74,12 @@ console.log('sdfasd');
 	let qty
 	
 	for ( i = 0; i < arritem.length; i+=1 ) {
-		console.log(arritem[i]);
+		
 		 rate=parseInt(arritem[i].price,10);
-		 console.log("rate=");
-		 console.log(rate); 
+		
 		 qty=parseInt(arritem[i].qty,10);
 		sum += rate*qty;
-		console.log(qty);
-		console.log(sum);
+		
 
 	} 
 	
@@ -95,14 +98,12 @@ console.log('sdfasd');
 	let qty
 	
 	for ( i = 0; i < arritem.length; i+=1 ) {
-		console.log(arritem[i]);
+		
 		 rate=parseInt(arritem[i].price,10);
-		 console.log("rate=");
-		 console.log(rate); 
+		
 		 qty=parseInt(arritem[i].qty,10);
 		sum += rate*qty;
-		console.log(qty);
-		console.log(sum);
+		
 
 	} 
 	
@@ -117,7 +118,13 @@ console.log('sdfasd');
 	
   }, [])
   
-
+  const logoStyle = {
+	width: "100px",
+	height: "100px",
+	
+		padding: "20px",
+	
+  };
 
 
   return (
@@ -132,7 +139,9 @@ console.log('sdfasd');
 		    <div className="row">
 
 				<div className="col-sm-6 top-left">
-					<i className="fa fa-rocket"/>
+					{/* <i className="fa fa-rocket"/> */}
+
+					<img src={imgPop} style={logoStyle} alt="logo" className="logo" />
 				</div>
 
 				<div className="col-sm-6 top-right">
