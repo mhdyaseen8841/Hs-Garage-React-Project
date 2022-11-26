@@ -1,14 +1,22 @@
-import{ React, useState,useEffect }from "react";
+import{ React, useState,useEffect,useRef }from "react";
 import { render } from "react-dom";
 import './invoice.css';
 
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import requestPost from '../../serviceWorker';
 import 'antd/dist/antd.css';
 
 
 const Invoices = (data) => {
 
+	const navigate = useNavigate()
+	const componentRef = useRef();
+	const handlePrint = useReactToPrint({
+	  content: () => componentRef.current,
+	});
+  
 
   // const [service, setServ] = useState([])
   const [invoiceData, setInvoiceData] = useState('')
@@ -24,8 +32,6 @@ const Invoices = (data) => {
 // console.log(servArr);
   const printdoc=()=>{
   
-    document.getElementById("printbutton").style.display="none";
-   window.print()
    data.onclose()
   }
 
@@ -126,12 +132,25 @@ if(res.data.result.bill.items[0]!==null){
 	
   };
 
+  const pageStyle = {
+	paddingTop: "20px",
+	paddingLeft: "60px",
+	
+	
+  };
 
   return (
     <>
  
-<div className="container bootstrap snippets bootdeys">
-<div className="row">
+<div  className="container bootstrap snippets bootdeys">
+<div style={pageStyle} className="row">
+			<div className="col-md-6 margintop">
+		
+			<KeyboardBackspaceIcon sx={{cursor: "pointer"}} onClick={printdoc} />
+				</div>
+			</div>
+	<div  ref={componentRef}>
+<div style={pageStyle} className="row">
   <div className="col-sm-12">
 	  	<div className="panel panel-default invoice" id="invoice">
 		  <div className="panel-body">
@@ -147,6 +166,8 @@ if(res.data.result.bill.items[0]!==null){
 				<div className="col-sm-6 top-right">
 						<h3 className="marginright">INVOICE NO-  {invNO} </h3>
 						<span className="marginright">{date}</span>
+									
+
 			    </div>
 
 			</div>
@@ -215,6 +236,10 @@ if(res.data.result.bill.items[0]!==null){
 
 
 
+ 
+
+
+
 {   servArr.length>0 ?
 <div>
 <h5 className="pt-4">Service</h5>
@@ -252,8 +277,8 @@ if(res.data.result.bill.items[0]!==null){
 			<div className="col-md-6 margintop">
 				<p className="lead marginbottom">THANK YOU!</p>
 
-				<button className="btn btn-success" id="printbutton"  onClick={printdoc}><i className="fa fa-print"/>Print Invoice</button>
-				{/* <button className="btn btn-danger"><i className="fa fa-envelope-o"/>Mail Invoice</button> */}
+				
+			
 			</div>
 			<div className="col-md-6 text-right pull-right invoice-total">
 					  
@@ -267,6 +292,15 @@ if(res.data.result.bill.items[0]!==null){
 	</div>
 </div>
 </div>
+<div style={pageStyle} className="row">
+			<div className="col-md-6 margintop">
+			<button className="btn btn-success" id="printbutton" onClick={handlePrint}><i className="fa fa-print"/>Print Invoice</button>
+		
+				</div>
+			</div>
+</div>
+
+
    </>
   );
 };

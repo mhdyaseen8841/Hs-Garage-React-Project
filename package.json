@@ -83,6 +83,7 @@
     "react-hook-form": "^7.33.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
+    "react-to-print": "^2.14.10",
     "react-webcam": "^7.0.1",
     "simplebar": "^5.3.8",
     "simplebar-react": "^2.4.1",
