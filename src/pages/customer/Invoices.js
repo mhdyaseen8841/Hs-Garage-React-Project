@@ -1,31 +1,40 @@
-import { React, useState, useEffect } from "react";
+import{ React, useState,useEffect }from "react";
 import { render } from "react-dom";
 import './invoice.css';
 
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import requestPost from '../../serviceWorker';
 import 'antd/dist/antd.css';
 
-
 const Invoices = (data) => {
 
+	const navigate = useNavigate()
+	const componentRef = useRef();
+	const handlePrint = useReactToPrint({
+	  content: () => componentRef.current,
+	});
+  
 
-	// const [service, setServ] = useState([])
-	const [invoiceData, setInvoiceData] = useState('')
-	const [servArr, setservArr] = useState([])
-	const [itemArr, setitemArr] = useState([])
-	const [invNO, setInvNo] = useState('')
-	const [date, setDate] = useState('')
-	const [sumvalue, setSum] = useState(0)
-	const [company, setCompany] = useState('')
-	// const servArr = data.data.state.services
-	// const itemArr = data.data.state.items
-	// console.log(servArr);
-	const printdoc = () => {
-		 window.print()
-		data.onclose()
-	}
-	
+  // const [service, setServ] = useState([])
+  const [invoiceData, setInvoiceData] = useState('')
+  const [servArr, setservArr] = useState([])
+  const [itemArr, setitemArr] = useState([])
+  const [invNO, setInvNo] = useState('')
+  const [date, setDate] = useState('')
+  const [sumvalue,setSum] = useState(0)
+  const [company,setCompany] = useState('')
+// const servArr = data.data.state.services
+// const itemArr = data.data.state.items
+// console.log(servArr);
+  const printdoc=()=>{
+  
+    document.getElementById("printbutton").style.display="none";
+   window.print()
+   data.onclose()
+  }
+
 
 
 	let sum = 0;
@@ -40,105 +49,104 @@ const Invoices = (data) => {
 
 		requestPost(rdata).then((res) => {
 
-			setCompany(res.data.result)
-		}).catch(() => {
-
-			console.log('No internet connection found. App is running in offline mode.');
-		})
-
-		const requestData = {
-			"type": "SP_CALL",
-			"requestId": 2100002,
-			"request": {
-				"cmId": data.data.state
-			}
+	setCompany(res.data.result)
+  }).catch(() => {
+  
+console.log('No internet connection found. App is running in offline mode.');
+})
+	
+	const requestData = {
+		"type": "SP_CALL",
+		"requestId": 2100002,
+		"request": {
+		  "cmId" : data.data.state
 		}
 
 		requestPost(requestData).then((res) => {
 
-			setInvoiceData(res.data.result)
-			console.log(res.data.result);
-			setInvNo(res.data.result.bill.invoiceNo)
-			setDate(res.data.result.bill.date)
-			if (res.data.result.bill.items[0] !== null) {
-				console.log('sdfasd');
-				setitemArr(res.data.result.bill.items)
-				const arritem = res.data.result.bill.items;
-				let i;
-				let rate
-				let qty
+setInvoiceData(res.data.result)
+console.log(res.data.result);
+setInvNo(res.data.result.bill.invoiceNo)
+setDate(res.data.result.bill.date)
+if(res.data.result.bill.items[0]!==null){
+console.log('sdfasd');
+	setitemArr(res.data.result.bill.items)
+	const arritem=res.data.result.bill.items;
+	let i;
+	let rate
+	let qty
+	
+	for ( i = 0; i < arritem.length; i+=1 ) {
+		console.log(arritem[i]);
+		 rate=parseInt(arritem[i].price,10);
+		 console.log("rate=");
+		 console.log(rate); 
+		 qty=parseInt(arritem[i].qty,10);
+		sum += rate*qty;
+		console.log(qty);
+		console.log(sum);
 
-				for (i = 0; i < arritem.length; i += 1) {
-					console.log(arritem[i]);
-					rate = parseInt(arritem[i].price, 10);
-					console.log("rate=");
-					console.log(rate);
-					qty = parseInt(arritem[i].qty, 10);
-					sum += rate * qty;
-					console.log(qty);
-					console.log(sum);
-
-				}
-
-			} else {
-
-				setitemArr([])
-			}
-
-			if (res.data.result.bill.services[0] !== null) {
-				setservArr(res.data.result.bill.services)
-
-
-				const arritem = res.data.result.bill.services;
-				let i;
-				let rate
-				let qty
-
-				for (i = 0; i < arritem.length; i += 1) {
-					console.log(arritem[i]);
-					rate = parseInt(arritem[i].price, 10);
-					console.log("rate=");
-					console.log(rate);
-					qty = parseInt(arritem[i].qty, 10);
-					sum += rate * qty;
-					console.log(qty);
-					console.log(sum);
-
-				}
-
-			} else {
-				setservArr([])
-			}
-			setSum(sum)
-		}).catch(() => {
-
-			console.log('No internet connection found. App is running in offline mode.');
-		})
-
-	}, [])
+	} 
+	
+	}else{
+		
+		setitemArr([])
+	}
+	
+	if(res.data.result.bill.services[0]!==null){
+	setservArr(res.data.result.bill.services)
 
 
+	const arritem=res.data.result.bill.services;
+	let i;
+	let rate
+	let qty
+	
+	for ( i = 0; i < arritem.length; i+=1 ) {
+		console.log(arritem[i]);
+		 rate=parseInt(arritem[i].price,10);
+		 console.log("rate=");
+		 console.log(rate); 
+		 qty=parseInt(arritem[i].qty,10);
+		sum += rate*qty;
+		console.log(qty);
+		console.log(sum);
+
+	} 
+	
+	}else{
+		setservArr([])
+	}
+	setSum(sum)
+	  }).catch(() => {
+
+		console.log('No internet connection found. App is running in offline mode.');
+	  })
+	
+  }, [])
+  
 
 
-	return (
-		<>
-			<div id="editor" />
-			<div className="container bootstrap snippets bootdeys" id="content">
-				<div className="row">
-					<div className="col-sm-12">
-						<div className="panel panel-default invoice" id="invoice">
-							<div className="panel-body">
-								{/* <div className="invoice-ribbon"><div className="ribbon-inner">PAID</div></div> */}
-								<div className="row">
 
-									<div className="col-sm-6 top-left">
-										<i className="fa fa-rocket" />
-									</div>
+  return (
+    <>
+ 
+<div className="container bootstrap snippets bootdeys">
+<div className="row">
+  <div className="col-sm-12">
+	  	<div className="panel panel-default invoice" id="invoice">
+		  <div className="panel-body">
+			{/* <div className="invoice-ribbon"><div className="ribbon-inner">PAID</div></div> */}
+		    <div className="row">
 
-									<div className="col-sm-6 top-right">
-										<h3 className="marginright">INVOICE NO-  {invNO} </h3>
-										<span className="marginright">{date}</span>
-									</div>
+				<div className="col-sm-6 top-left">
+					<i className="fa fa-rocket"/>
+				</div>
+
+				<div className="col-sm-6 top-right">
+						<h3 className="marginright">INVOICE NO-  {invNO} </h3>
+						<span className="marginright">{date}</span>
+			    </div>
 
 								</div>
 								<hr />
@@ -200,66 +208,66 @@ const Invoices = (data) => {
 												</tbody>
 											</table>
 
-										</div>
-									</div>
-									: null}
-
-
-
-								{servArr.length > 0 ?
-									<div>
-										<h5 className="pt-4">Service</h5>
-										<div className="row table-row">
-											<table className="table table-striped">
-												<thead>
-													<tr>
-														<th className="text-center" style={{ width: '5%' }}>#</th>
-														<th style={{ width: '50%' }}>Service</th>
-														<th className="text-right" style={{ width: '15%' }}>Quantity</th>
-														<th className="text-right" style={{ width: '15%' }}>Unit Price</th>
-														<th className="text-right" style={{ width: '15%' }}>Total Price</th>
-													</tr>
-												</thead>
-												<tbody>
-													{servArr.map((item, index) => (
-														<tr>
-															<td className="text-center">{index + 1}</td>
-															<td>{item.service}</td>
-															<td className="text-right">{item.qty}</td>
-															<td className="text-right">AED{item.price}</td>
-															<td className="text-right">AED {item.qty * item.price}</td>
-														</tr>
-													))}
-
-
-												</tbody>
-											</table>
-
-										</div>
-									</div>
-
-									: null}
-								<div className="row">
-									<div className="col-md-6 margintop">
-										<p className="lead marginbottom">THANK YOU!</p>
-
-										<button className="btn btn-success" id="printbutton" onClick={printdoc}><i className="fa fa-print" />Print Invoice</button>
-										{/* <button className="btn btn-danger"><i className="fa fa-envelope-o"/>Mail Invoice</button> */}
-									</div>
-									<div className="col-md-6 text-right pull-right invoice-total">
-
-
-										<p>Total : {sumvalue} </p>
-									</div>
-								</div>
-
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
-		</>
-	);
+            </div>
+ : null} 
+
+
+
+{   servArr.length>0 ?
+<div>
+<h5 className="pt-4">Service</h5>
+            <div className="row table-row">
+				<table className="table table-striped">
+			      <thead>
+			        <tr>
+			          <th className="text-center" style={{width:'5%'}}>#</th>
+			          <th style={{width:'50%'}}>Service</th>
+			          <th className="text-right" style={{width:'15%'}}>Quantity</th>
+			          <th className="text-right" style={{width:'15%'}}>Unit Price</th>
+			          <th className="text-right" style={{width:'15%'}}>Total Price</th>
+			        </tr>
+			      </thead>
+			      <tbody>
+                    {servArr.map((item, index) => (
+                        <tr>
+                        <td className="text-center">{index+1}</td>
+                        <td>{item.service}</td>
+                        <td className="text-right">{item.qty}</td>
+                        <td className="text-right">AED{item.price}</td>
+                        <td className="text-right">AED {item.qty*item.price}</td>
+                      </tr>
+                    ))}
+			        
+			       
+			       </tbody>
+			    </table>
+
+										</div>
+									</div>
+
+ : null} 
+			<div className="row">
+			<div className="col-md-6 margintop">
+				<p className="lead marginbottom">THANK YOU!</p>
+
+				<button className="btn btn-success" id="printbutton"  onClick={printdoc}><i className="fa fa-print"/>Print Invoice</button>
+				{/* <button className="btn btn-danger"><i className="fa fa-envelope-o"/>Mail Invoice</button> */}
+			</div>
+			<div className="col-md-6 text-right pull-right invoice-total">
+					  
+			          
+			          <p>Total : {sumvalue} </p>
+			</div>
+			</div>
+
+		  </div>
+		</div>
+	</div>
+</div>
+</div>
+   </>
+  );
 };
 
 export default Invoices
