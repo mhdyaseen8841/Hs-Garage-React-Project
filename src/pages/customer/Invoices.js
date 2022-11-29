@@ -22,7 +22,7 @@ const Invoices = (data) => {
 			}
 			#invoice{
 				width:100%;
-				overflow: hidden;
+				heigth: auto;
 			}
 		  }`,
 		content: () => componentRef.current,

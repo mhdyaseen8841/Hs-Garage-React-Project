@@ -3,9 +3,9 @@ import axios from 'axios';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import FileSaver from 'file-saver';
+import XLSX from 'sheetjs-style';
 
 // material
 import {
@@ -22,6 +22,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  Dialog,
 } from '@mui/material';
 
 // components
@@ -35,19 +36,36 @@ import FullScreenDialog from './customer/addCustomer';
 import requestPost from '../serviceWorker';
 // mock';
 import ServiceURL from '../constants/url';
+import Invoice from './customer/Invoices';
 
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'vehicle Number', alignRight: false },
-  { id: 'mobile', label: 'Advance', alignRight: false },
+  { id: 'billNo', label: 'Bill Number', alignRight: false },
+  { id: 'vId', label: 'vehicle Number', alignRight: false },
+  { id: 'customerName', label: 'Customer ', alignRight: false },
+  { id: 'mobile', label: 'Mobile', alignRight: false },
   { id: 'address', label: 'Amount', alignRight: false },
   { id: 'date', label: 'Date', alignRight: false },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
+
+
+  const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+  const fileExtension = '.xlsx';
+  const exportExcel = async (data) =>{
+      console.log(data);
+      const workbook = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "People");
+
+      XLSX.writeFile(wb, "sheetjs.xlsx");
+      // FileSaver.saveAs(data1,`sales${fileExtension}`);
+  }
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -85,31 +103,7 @@ export default function Bills() {
   const handleClose = () => {
     setDialog();
   };
-  const [USERLIST,setUserList] = useState([]);
-  const requestdata = 
-    {
-      "type":"SP_CALL",
-      "requestId":1600005,
-      "request":{
-      }
-    }
-      const display =()=>{
-        requestPost(requestdata).then((res) => {
-       if(res.data.errorCode === 0){
-
-          setUserList(res.data.result);
-       }
-       else{
-        setUserList([]);
-       }
-        }).catch((error) => {
-          console.log(error);
-            console.log('No internet connection found. App is running in offline mode.');
-          });
-      }
-  useEffect(() => {
-   display();
-  }, [])
+  const [USERLIST, setUserList] = useState([]);
   
   const [open, setOpen] = useState(true);
 
@@ -127,6 +121,39 @@ export default function Bills() {
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
+  const [cmid, setcmid] = useState();
+
+  const [openInvoice, setOpenInvoice] = useState(false);
+
+  
+  const display = (srtdte) => {
+
+    const requestdata =
+  {
+    "type": "SP_CALL",
+    "requestId": 2100004,
+    "request": {
+      date:srtdte
+    }
+  }
+    requestPost(requestdata).then((res) => {
+      console.log(res.data.result);
+      if (res.data.errorCode === 1) {
+        setUserList(res.data.result);
+      }
+      else {
+        setUserList([]);
+      }
+    }).catch((error) => {
+      console.log(error);
+      console.log('No internet connection found. App is running in offline mode.');
+    });
+  }
+  useEffect(() => {
+    display(null);
+  }, [])
+
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -142,52 +169,44 @@ export default function Bills() {
     setSelected([]);
   };
 
-  const deleteUser = (cid)=>{
+  const deleteUser = (cid) => {
     const deleterequestdata = {
-      "type" : "SP_CALL",
-    "requestId" : 1600004,
-       request: {
-    "id" : cid
+      "type": "SP_CALL",
+      "requestId": 1600004,
+      request: {
+        "id": cid
       }
     }
-    
-    axios.post(ServiceURL,deleterequestdata).then((res) => {
+
+    axios.post(ServiceURL, deleterequestdata).then((res) => {
       display();
-        }).catch(() => {
-            console.log('No internet connection found. App is running in offline mode.');
-          });
-             }
-
-
-         
-    
-
-             
-
-
+    }).catch(() => {
+      console.log('No internet connection found. App is running in offline mode.');
+    });
+  }
 
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
-   
+
     setOpen(true);
     const add = (data) => {
       setDialog();
-      if(!upd){
+      if (!upd) {
         localStorage.setItem('cId', data.cId);
         handleClose();
-        navigate('/dashboard/customerdetails',{state:"add"});
+        navigate('/dashboard/customerdetails', { state: "add" });
       }
-        display();
-      
+      display();
+
     };
     setDialog(() => (
-      
+
       <FullScreenDialog
         onClose={handleClose}
         open={open}
-         submit={add}
-         updated={upd}
-         button={button}
-         data={data}
+        submit={add}
+        updated={upd}
+        button={button}
+        data={data}
       />
     ));
   };
@@ -206,6 +225,26 @@ export default function Bills() {
   //   }
   //   setSelected(newSelected);
   // };
+
+  function formatDate(date) {
+
+    const d = new Date(date)
+    console.log(d);
+    let month = `${(d.getMonth() + 1)}`
+    let day = `${d.getDate()}`
+    const year = `${d.getFullYear()}`
+
+    if (month.length < 2) 
+        month = `0${month}`;
+    if (day.length < 2) 
+        day = `0${day}`;
+
+    return [year, month, day].join('-');
+}
+
+  const onClose = () => {
+    setOpenInvoice(false)
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -226,22 +265,36 @@ export default function Bills() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+
   return (
     <Page title="Customer">
       <Container maxWidth="xl">
-      {addDialog}
+        <Dialog fullScreen open={openInvoice} onClose={onClose}>
+          <Invoice data={{ state: cmid }} onclose={onClose} />
+        </Dialog>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Customer
+            Bills
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" onClick={handleAdd} startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Customer
-          </Button>
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
-
+          <Stack direction="row" alignItems="right" justifyContent="space-between" padding={3}>
+            <Stack direction="row" alignItems="right" justifyContent="space-between" >
+              <Button variant='contained' onClick={()=>{ 
+                display(formatDate(new Date(new Date().getFullYear(), 0, 1)));
+                }}>This year</Button>
+              <Button variant='contained' onClick={()=>{ 
+                display(formatDate(new Date(new Date().getFullYear(),new Date().getMonth(), 1)));
+                }}>This month</Button>
+              <Button variant='contained' onClick={()=>{ 
+                display(formatDate(new Date()));
+                }}>Today</Button>
+            </Stack>
+            <Stack direction="row" alignItems="right" justifyContent="space-between">
+              <Button onClick={()=>{exportExcel(USERLIST)}}>Export Excel</Button>
+            </Stack>
+          </Stack>
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -252,28 +305,23 @@ export default function Bills() {
                   rowCount={USERLIST.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
-                 // onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { cId, id, name, role, mobile, address } = row;
-                    const title=name;
-                  //  const isItemSelected = selected.indexOf(name) !== -1;
+                    const { billId, cmpId, name, mobile, vehicle, amount, date } = row;
                     return (
-                      <TableRow>                      
-                        <TableCell component="th" scope="row" >
-                            <Typography variant="h6"  sx={{cursor: "pointer"}} onClick={()=>{
-                               localStorage.setItem('cId', cId);
-                              navigate('/dashboard/customerdetails',{state:row})
-                            }}>
-                              {name}
-                            </Typography>
-                        </TableCell>
+                      <TableRow>
+                        <TableCell align="left">{billId}</TableCell>
+                        <TableCell align="left">{vehicle}</TableCell>
+                        <TableCell align="left">{name}</TableCell>
                         <TableCell align="left">{mobile}</TableCell>
-                        <TableCell align="left">{address}</TableCell>
-                        <TableCell align="left">{address}</TableCell>
-                        <TableCell align="right"  >
-                          <UserMoreMenu callback={()=>{deleteUser(cId)}} editUser={(e)=>handleAdd(e,true,'EDIT',row)}/>
+                        <TableCell align="left">{amount}</TableCell>
+                        <TableCell align="left">{date}</TableCell>
+                        <TableCell align="right" >
+                          <ReceiptIcon style={{ cursor: 'pointer' }} onClick={() => {
+                            setcmid(cmpId)
+                            setOpenInvoice(true);
+                          }} />
                         </TableCell>
                       </TableRow>
                     );
