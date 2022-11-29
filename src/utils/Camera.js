@@ -46,11 +46,8 @@ const Camera = (getProps) => {
         new Compressor(event.target.files[0], {      
             quality: 0.1,
             success: (compressedResult) => {
-                console.log(compressedResult);
                 getBase64(compressedResult).then((result) => {
                     setimgbase64(result);
-                    console.log(localStorage.getItem('vId'));
-                    console.log(result);
                     getProps.callback(result)
                     setImgPreview();
 

@@ -101,11 +101,7 @@ export default function CustomerDetails() {
 
 
   function display(){
-    console.log(data.state);
     axios.post(ServiceURL,requestdata).then((res) => {
-      console.log(res.data);
-      console.log(res.data.errorCode === 0);
-      console.log(res.data.errorCode);
   if(res.data.errorCode === 0){
     setUsername(res.data.result.cname);
     setUserList(res.data.result.vehicles);
@@ -155,7 +151,6 @@ export default function CustomerDetails() {
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
     setOpen(true);
     const add = (data) => {
-      console.log(data);
       display();
       setDialog();
       setOpen(false);
@@ -177,8 +172,6 @@ export default function CustomerDetails() {
   };
 
   const deleteUser = (vId)=>{
-
-console.log(USERLIST.length);
     if(USERLIST.length===1){
       setDialog(() => (
         <CustomizedDialogs  onClose={handleClose}  name="vehicle"/>
@@ -193,8 +186,7 @@ console.log(USERLIST.length);
       }
     }
     
-    axios.post(ServiceURL,deleterequestdata).then((res) => {
-      console.log(res);   
+    axios.post(ServiceURL,deleterequestdata).then((res) => { 
       display();
         }).catch(() => {
             console.log('No internet connection found. App is running in offline mode.');

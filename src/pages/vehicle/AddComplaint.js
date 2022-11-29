@@ -46,7 +46,6 @@ export default function AddComplaint(details) {
     },
     validationSchema: validSchema,
     onSubmit: (values, actions) => {
-      console.log("submited")
       handleAddNew();
       formik.resetForm();
     }
@@ -55,25 +54,17 @@ export default function AddComplaint(details) {
 
 
   const handleAddNew = ()=>{
-    console.log("hloooooooooooooooooo");
-   console.log(imagedata);
    setImgStatus(false);
     setComplaints([...complaints, {
       complaint: values.Complaint,
       problem: values.Problem,
       image: !imagedata ? '' :imagedata
    }]);
-   
-console.log(values.Complaint);
-console.log(values.Problem);
 setImageData('');
-console.log(complaints);
 
   }
 
   const onAdd = () => {
-    console.log("hlooooooooooooooooooo");
-    console.log(localStorage.getItem('vId'));
 
     setComplaints([...complaints, {
       complaint: values.Complaint,
@@ -81,7 +72,6 @@ console.log(complaints);
       image: !imagedata ? '' :imagedata
    }]);
    
-   console.log(complaints);
     const requestdata = 
     {
       "type" : "SP_CALL",
@@ -92,7 +82,6 @@ console.log(complaints);
         "complaints" : complaints
       }
 }
-console.log(requestdata);
       
       axios.post(ServiceURL,requestdata).then((res) => {
         
@@ -108,7 +97,6 @@ console.log(requestdata);
 //   setAlert(res.data.errorMsg);
 // }
 setAlert();
-console.log(res.data);
   details.submit(res.data);
       }).catch(() => {
           console.log('No internet connection found. App is running in offline mode.');

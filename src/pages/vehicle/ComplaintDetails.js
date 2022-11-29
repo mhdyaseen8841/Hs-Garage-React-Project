@@ -133,13 +133,9 @@ const [user,username] = useState("username");
 
 
       const displayComplaints =()=>{
-        console.log(requestdata);
         axios.post(ServiceURL,requestdata).then((res) => {
-      console.log(res);
           if(res.data.result.complaints){
-            setUserList(res.data.result.complaints);
-           
-            console.log(res.data.result.complaints);
+            setUserList(res.data.result.complaints);;
             
           }else{
             setUserList([]);
@@ -147,7 +143,6 @@ const [user,username] = useState("username");
           
           
           setVehicleDetails({"vehicleModel":res.data.result.model,"vehicleNumber":res.data.result.number});
-console.log(vehicleDetails);
         }).catch((err) => {
           console.log(err);
             console.log('No internet connection found. App is running in offline mode.');
@@ -190,7 +185,6 @@ displayComplaints()
   };
 
   const deleteUser = (cmdid)=>{
-   console.log(USERLIST.length);
     if(USERLIST.length===1){
       setDialog(() => (
         <CustomizedDialogs  onClose={handleClose}  name="complaint"/>
@@ -206,7 +200,6 @@ displayComplaints()
       }
 
       axios.post(ServiceURL,deleterequestdata).then((res) => {
-        console.log(res);   
         displayComplaints();
           }).catch(() => {
               console.log('No internet connection found. App is running in offline mode.');

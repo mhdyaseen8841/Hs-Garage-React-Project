@@ -52,7 +52,6 @@ export default function PasswordChange(props) {
         //   }, 1000);
         props.callback();
         } else {
-          console.log(res.data);
           setAlertState('error');
           setAlertMsg(res.data.errorMsg);
           setSnackstate(true);
@@ -62,7 +61,6 @@ export default function PasswordChange(props) {
         // }, 1000);
       });
 
-    console.log(values);
     }
   });
   const handleClose = () => {

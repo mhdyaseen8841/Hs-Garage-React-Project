@@ -110,13 +110,9 @@ export default function Customer() {
       const display =()=>{
         requestPost(requestdata).then((res) => {
        if(res.data.errorCode === 1){
-        console.log(res.data.result);
-          console.log(res.data);
-
           setUserList(res.data.result);
        }
        else{
-        console.log(res.data);
         setUserList([]);
        }
         }).catch((error) => {
@@ -187,7 +183,6 @@ export default function Customer() {
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
    
     setOpen(true);
-    console.log(data)
     const add = (data) => {
       setDialog();
       if(!upd){

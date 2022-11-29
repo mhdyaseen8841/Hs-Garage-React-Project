@@ -14,8 +14,6 @@ const Invoice = (data) => {
 
 const servArr = data.data.state.services
 const itemArr = data.data.state.items
-console.log(itemArr);
-console.log(servArr);
   const printdoc=()=>{
   
     document.getElementById("printbutton").style.display="none";

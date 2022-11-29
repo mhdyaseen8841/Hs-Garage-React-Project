@@ -95,13 +95,10 @@ export default function Customer() {
       const display =()=>{
         requestPost(requestdata).then((res) => {
        if(res.data.errorCode === 0){
-        console.log(res.data.result);
-          console.log(res.data);
 
           setUserList(res.data.result);
        }
        else{
-        console.log(res.data);
         setUserList([]);
        }
         }).catch((error) => {
@@ -153,8 +150,7 @@ export default function Customer() {
       }
     }
     
-    axios.post(ServiceURL,deleterequestdata).then((res) => {
-      console.log(res);   
+    axios.post(ServiceURL,deleterequestdata).then((res) => { 
       display();
         }).catch(() => {
             console.log('No internet connection found. App is running in offline mode.');
@@ -172,7 +168,6 @@ export default function Customer() {
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
    
     setOpen(true);
-    console.log(data)
     const add = (data) => {
       setDialog();
       if(!upd){
@@ -262,7 +257,6 @@ export default function Customer() {
                   {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { cId, id, name, role, mobile, address } = row;
                     const title=name;
-                    console.log( USERLIST.length)
                   //  const isItemSelected = selected.indexOf(name) !== -1;
                     return (
                       <TableRow>                      

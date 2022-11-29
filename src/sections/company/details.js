@@ -54,7 +54,6 @@ export default function DetailsChange(props) {
             props.callback();
           }, 1000);
         } else {
-          console.log(res.data);
           setAlertState('error');
           setAlertMsg(res.data.errorMsg);
           setSnackstate(true);

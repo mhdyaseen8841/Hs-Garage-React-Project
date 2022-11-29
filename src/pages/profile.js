@@ -36,7 +36,6 @@ export default function Profile() {
   };
   const handleListItemClick = (tag) => {
     if (tag) {
-      console.log('viewed Profile Picture');
       setOpen(false);
       setView(true);
     } else {

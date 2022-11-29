@@ -102,12 +102,9 @@ export default function User() {
       const display =()=>{
         requestPost(requestdata).then((res) => {
        if(res.data.errorCode === 0){
-        console.log(res.data.result);
-          console.log(res.data);
           setUserList(res.data.result);
        }
        else{
-        console.log(res.data);
         setUserList([]);
        }
         }).catch((error) => {
@@ -161,7 +158,6 @@ export default function User() {
     }
     
     axios.post(ServiceURL,deleterequestdata).then((res) => {
-      console.log(res);   
       display();
         }).catch(() => {
             console.log('No internet connection found. App is running in offline mode.');
@@ -169,7 +165,6 @@ export default function User() {
              }
 
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
-    console.log(data)
     const add = (data) => {
       setOpen(false) ;
       setDialog();
@@ -210,7 +205,6 @@ export default function User() {
 
  
   const StatusMenu = (prop)=>{
-    console.log(prop);
     const ref = useRef(null)
     const [isOpen, setIsOpen] = useState(false);
     const spcall = (status)=>{
@@ -222,9 +216,7 @@ export default function User() {
 	       "status" : status
        }
       }
-      console.log(requestdata);
       axios.post(ServiceURL,requestdata).then((res) => {
-        console.log(res);
          display();
           }).catch(() => {
               console.log('No internet connection found. App is running in offline mode.');

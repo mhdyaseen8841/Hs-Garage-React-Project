@@ -18,7 +18,6 @@ import ServiceURL from '../../constants/url';
 
 
 export default function FullScreenDialog(details) {
-  console.log(details.data);
   const [update, setUpdate] = useState(details.updated);
   const validSchema = Yup.object().shape({
     CustomerName: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Name is required'),
@@ -55,8 +54,6 @@ export default function FullScreenDialog(details) {
   
 
   const onAdd = () => {
-    console.log(values);
-   console.log(update);
     const requestdata = 
     {
       "type":"SP_CALL",
@@ -70,7 +67,6 @@ export default function FullScreenDialog(details) {
       }
     }
 
-    console.log(requestdata);
       
       axios.post(ServiceURL,requestdata).then((res) => {
         if(res.data.errorCode===1)

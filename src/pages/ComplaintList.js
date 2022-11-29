@@ -128,7 +128,6 @@ const [user,username] = useState("username");
       const displayComplaints =()=>{
         axios.post(ServiceURL,requestdata).then((res) => {
       
-          console.log(res.data);
           setUserList(res.data.result.complaints);
         }).catch(() => {
             console.log('No internet connection found. App is running in offline mode.');
@@ -187,7 +186,6 @@ displayComplaints()
         }  
     
     axios.post(ServiceURL,deleterequestdata).then((res) => {
-      console.log(res);   
       displayComplaints();
         }).catch(() => {
             console.log('No internet connection found. App is running in offline mode.');
@@ -255,7 +253,6 @@ displayComplaints()
        }
       }
        axios.post(ServiceURL,requestdata).then((res) => {
-        console.log(res);   
         displayComplaints();
           }).catch(() => {
               console.log('No internet connection found. App is running in offline mode.');
@@ -334,7 +331,6 @@ displayComplaints()
                             <Typography variant="subtitle2" sx={{cursor: "pointer"}}
                             onClick={()=>{
                               localStorage.setItem('cmId', cmId);
-                              console.log(cmId)
                              navigate('/dashboard/complaintDetails')
                            }}>
                               {visitDate}

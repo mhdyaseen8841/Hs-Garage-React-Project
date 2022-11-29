@@ -35,8 +35,6 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: (values, actions) => {
-      console.log(getFieldProps('user').value);
-      console.log(localStorage.getItem('IP'));
       const requestOptions = {
         "type" : "Authetication",
            "request": {
@@ -47,7 +45,6 @@ export default function LoginForm() {
         
 
       axios.post(ServiceURL,requestOptions).then((res) => {
-        console.log(res);
         if(res.data.errorCode===1){
           localStorage.setItem('loginId', res.data.result.aid);
           localStorage.setItem('name', res.data.result.name);

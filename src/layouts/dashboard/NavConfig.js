@@ -10,7 +10,6 @@ export function getNavConfig() {
   if (localStorage.getItem('userType') != null) {
     user = localStorage.getItem('userType');
   }
-  console.log(user);
   const navConfig = []
   if (user === 'admin') {
     navConfig.push({

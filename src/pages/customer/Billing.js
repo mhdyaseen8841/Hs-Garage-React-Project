@@ -51,7 +51,6 @@ function Billing() {
   const mm = String(today.getMonth() + 1).padStart(2, '0');
   const yyyy = today.getFullYear();
   const dte = `${yyyy}-${mm}-${dd}`;
-  console.log(dte);
 
 
   const [invoiceData, setInvoiceData] = useState({})
@@ -89,7 +88,6 @@ setcmid(data.state.cid)
       }
     }
     axios.post(ServiceURL, requestdata2).then((res) => {
-      console.log(res.data.result);
       setItems(res.data.result.map((value) => { return { label: value.itemName, rate: value.rate } }));
     }).catch(() => {
       console.log('No internet connection found. App is running in offline mode.');
@@ -102,8 +100,6 @@ setcmid(data.state.cid)
   let bills = []
 
   const generateBill = () => {
-
-    console.log(data.state.cid);
     const requestdata = {
       "type": "SP_CALL",
       "requestId": 2100003,
@@ -113,27 +109,21 @@ setcmid(data.state.cid)
       }
     }
 
-    console.log("bill generation");
-    console.log(requestdata);
 
     axios.post(ServiceURL, requestdata).then((res) => {
 
-      console.log(res);
     }).catch(() => {
       console.log('No internet connection found. App is running in offline mode.');
     })
   }
 
   const createInvoice = () => {
-    console.log("createInvoice");
-
    
    
 
     [...Array(noOfRows)].map((elementInArray, ind) => {
 
       if (document.getElementById(`item${ind}`).value !== "") {
-        console.log(document.getElementById(`service${ind}`).innerHTML);
         if (document.getElementById(`service${ind}`).innerHTML === "Item") {
 
           itemArr.push({

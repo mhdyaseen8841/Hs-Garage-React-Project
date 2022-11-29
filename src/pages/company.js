@@ -67,7 +67,6 @@ export default function Company(props) {
     };
     const handleListItemClick = (tag) => {
         if (tag) {
-            console.log('viewed Profile Picture');
             setOpen(false);
             setView(true);
         } else {
@@ -91,10 +90,8 @@ export default function Company(props) {
         }
     };
     const uploadToServer = (file) => {
-        console.log(file);
         const reader = new FileReader();
        reader.onloadend = function() {
-        console.log(reader.result);
          const requestData = {
             "type": "SP_CALL",
             "requestId": 2400004,
@@ -102,7 +99,6 @@ export default function Company(props) {
                 logo: reader.result
             }
           }
-          console.log(requestData);
           requestPost(requestData).then((res) => {
             if (res.data.errorCode === 1) {
               setdatas(res.data.result);

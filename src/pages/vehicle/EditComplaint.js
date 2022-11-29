@@ -47,8 +47,6 @@ export default function AddComplaint(details) {
     },
     validationSchema: validSchema,
     onSubmit: (values, actions) => {
-      console.log("submited")
-     
       onAdd()
     }
   });
@@ -58,8 +56,6 @@ export default function AddComplaint(details) {
  
 
   const onAdd = () => {
-    console.log("hlooooooooooooooooooo");
-    
     const requestdata = 
     {
         "type" : "SP_CALL",
@@ -72,7 +68,6 @@ export default function AddComplaint(details) {
              }
   }
  
-console.log(requestdata);
       
       axios.post(ServiceURL,requestdata).then((res) => {
       
@@ -88,7 +83,6 @@ console.log(requestdata);
 //   setAlert(res.data.errorMsg);
 // }
 setAlert();
-console.log(res.data);
   details.submit(res.data);
       }).catch(() => {
           console.log('No internet connection found. App is running in offline mode.');

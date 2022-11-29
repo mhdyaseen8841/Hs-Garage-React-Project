@@ -19,7 +19,6 @@ import Iconify from '../../components/Iconify';
 
 
 export default function FullScreenDialog(details) {
-  console.log(details.data);
   const [update, setUpdate] = useState(details.updated);
   const [showPassword, setShowPassword] = useState(false);
   const [type, setType] = useState(update ? details.data.userId : 2);
@@ -61,10 +60,8 @@ export default function FullScreenDialog(details) {
       }
     }
 
-    console.log(requestdata);
 
     axios.post(ServiceURL, requestdata).then((res) => {
-      console.log(res.data);
       if (res.data.errorCode === 1) {
 
         setAlert();
@@ -172,7 +169,7 @@ export default function FullScreenDialog(details) {
                 row
                 aria-labelledby="demo-radio-buttons-group-label"
                 defaultValue={update ? details.data.userId : 2}
-                onChange={(e) => { console.log(e.target.value); setType(e.target.value)}}
+                onChange={(e) => { setType(e.target.value)}}
               >
                 <FormControlLabel
                   value={1}

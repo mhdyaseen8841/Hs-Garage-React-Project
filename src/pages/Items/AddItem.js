@@ -18,7 +18,6 @@ import { Box } from '@mui/system';
 import ServiceURL from '../../constants/url';
 
 export default function FullScreenDialog(details) {
-  console.log(details.data);
   const [update, setUpdate] = useState(details.updated);
   const validSchema = Yup.object().shape({
     ItemName: Yup.string().matches(/^\S/, 'Whitespace is not allowed').required('Name is required'),
@@ -63,14 +62,11 @@ export default function FullScreenDialog(details) {
    }]);
    
 
-console.log(items);
 
   }
   
 
   const onAdd = () => {
-    console.log(values);
-   console.log(update);
     const requestdata = 
     {
       "type":"SP_CALL",
@@ -83,8 +79,6 @@ console.log(items);
   "id" : update ? details.data.cId : 0
       }
     }
-
-    console.log(requestdata);
       
       axios.post(ServiceURL,requestdata).then((res) => {
         if(res.data.errorCode===1)

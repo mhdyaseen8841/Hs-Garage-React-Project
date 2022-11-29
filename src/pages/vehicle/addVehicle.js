@@ -75,13 +75,10 @@ export default function FullScreenDialog(details) {
       axios.post(ServiceURL,requestdata).then((res) => {
         if(res.data.errorCode===1)
 {
-  console.log(res);
   setAlert();
   details.onClose();
   details.submit(res.data.result);
 }       else{
-  console.log(res)
-  console.log(res.data.errorMsg);
   setAlert(res.data.errorMsg);
 }
       }).catch(() => {

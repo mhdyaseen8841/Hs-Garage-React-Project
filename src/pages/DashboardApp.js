@@ -145,18 +145,15 @@ export default function DashboardApp() {
         "stopDate": date2.format("YYYY/MM/DD")
       }
     }
-    console.log(requestdata);
     requestPost(requestdata).then((res) => {
-      console.log(res.data);
       if (res.data.errorCode === 0) {
-        console.log(res.data.result)
         const label = []
         const cdata = []
         if (res.data.result.chart[0] != null) {
           res.data.result.chart.map((data) => {
             label.push(data.date)
             cdata.push(data.amount)
-            return data
+            return 0;
           })
         }
         if (res.data.result.tableData[0] != null) {
@@ -167,12 +164,10 @@ export default function DashboardApp() {
         }
         setChartData(cdata);
         setChartLable(label)
-        console.log(USERLIST);
-        // console.log(chartData);
-        // console.log(chartlabel);
+         console.log(chartData);
+         console.log(chartlabel);
       }
       else {
-        console.log(res.data.errorMsg)
         setChartData([])
         setUserList([])
       }
@@ -235,7 +230,6 @@ const genBill = () =>{
     }
   }
   requestPost(requestData).then((res) => {
-    console.log(res.data);
     if (res.data.errorCode === 1) {
       setOpen(false);
       navigate('/dashboard/billing', {state:{cid:cmid}});
@@ -255,9 +249,7 @@ const billstatus = () => {
       "cmId" : cmid
     }
   }
-  console.log(requestData);
   requestPost(requestData).then((res) => {
-    console.log(res.data);
     if(res.data.errorcode === 1){
       if(res.data.result.billStatus === "0"){
         genBill();
@@ -276,7 +268,6 @@ const billstatus = () => {
   )
 }
 const handleSubmit = () =>{
-  console.log("handle submit");
   billstatus();
 }
 const handleSkip = () =>{
@@ -409,7 +400,6 @@ const onClose = () => {
                           <TableRow>
                             <TableCell component="th" scope="row" onClick={() => {
                               localStorage.setItem('cmId', cmId);
-                              console.log(cmId)
                               navigate('/dashboard/complaintDetails')
                             }}>
                               <Typography variant="h6" sx={{ cursor: "pointer" }}  >

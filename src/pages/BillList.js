@@ -96,13 +96,10 @@ export default function Bills() {
       const display =()=>{
         requestPost(requestdata).then((res) => {
        if(res.data.errorCode === 0){
-        console.log(res.data.result);
-          console.log(res.data);
 
           setUserList(res.data.result);
        }
        else{
-        console.log(res.data);
         setUserList([]);
        }
         }).catch((error) => {
@@ -155,7 +152,6 @@ export default function Bills() {
     }
     
     axios.post(ServiceURL,deleterequestdata).then((res) => {
-      console.log(res);   
       display();
         }).catch(() => {
             console.log('No internet connection found. App is running in offline mode.');
@@ -173,7 +169,6 @@ export default function Bills() {
   const handleAdd = (e, upd = Boolean(false), button = 'ADD', data = {}) => {
    
     setOpen(true);
-    console.log(data)
     const add = (data) => {
       setDialog();
       if(!upd){
@@ -263,7 +258,6 @@ export default function Bills() {
                   {filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { cId, id, name, role, mobile, address } = row;
                     const title=name;
-                    console.log( USERLIST.length)
                   //  const isItemSelected = selected.indexOf(name) !== -1;
                     return (
                       <TableRow>                      
