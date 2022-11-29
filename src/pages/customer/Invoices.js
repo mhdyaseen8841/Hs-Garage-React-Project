@@ -1,4 +1,4 @@
-import{ React, useState,useEffect }from "react";
+import{ React, useState,useEffect, useRef }from "react";
 import { render } from "react-dom";
 import './invoice.css';
 
@@ -6,6 +6,7 @@ import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import requestPost from '../../serviceWorker';
+import Page from '../../components/Page';
 import 'antd/dist/antd.css';
 
 const Invoices = (data) => {
@@ -13,7 +14,18 @@ const Invoices = (data) => {
 	const navigate = useNavigate()
 	const componentRef = useRef();
 	const handlePrint = useReactToPrint({
-	  content: () => componentRef.current,
+		pageStyle: `@media print {
+			@page {
+			  size: A4;
+			  margin: 1cm;
+			  page-break-after: auto;
+			}
+			#invoice{
+				width:100%;
+				overflow: hidden;
+			}
+		  }`,
+		content: () => componentRef.current,
 	});
   
 
@@ -61,6 +73,7 @@ console.log('No internet connection found. App is running in offline mode.');
 		"request": {
 		  "cmId" : data.data.state
 		}
+	}
 
 		requestPost(requestData).then((res) => {
 
@@ -129,18 +142,16 @@ console.log('sdfasd');
 
 
   return (
-    <>
- 
-<div className="container bootstrap snippets bootdeys">
+	<Page title={`INVOICE${invNO}`}>
+<div className="container bootstrap snippets bootdeys" >
 <div className="row">
   <div className="col-sm-12">
-	  	<div className="panel panel-default invoice" id="invoice">
+	  	<div className="panel panel-default invoice" id="invoice" ref={componentRef} >
 		  <div className="panel-body">
-			{/* <div className="invoice-ribbon"><div className="ribbon-inner">PAID</div></div> */}
 		    <div className="row">
 
 				<div className="col-sm-6 top-left">
-					<i className="fa fa-rocket"/>
+					<img src={company.logo} alt="logo"  style={{ objectFit: 'contain', height:128, width:128}} />
 				</div>
 
 				<div className="col-sm-6 top-right">
@@ -152,7 +163,7 @@ console.log('sdfasd');
 								<hr />
 								<div className="row">
 
-									<div className="col-md-6 from">
+									<div className="col-md-4 from ">
 										<p className="lead marginbottom">From : {company.name}</p>
 										<p>{company.address}</p>
 
@@ -160,8 +171,11 @@ console.log('sdfasd');
 										<p>Phone: {company.mobile}</p>
 										<p>Email: {company.email}</p>
 									</div>
+									<div className="col-md-4">
+										{/* sample space */}
+									</div>
 
-									<div className="col-md-6 to ">
+									<div className="col-md-4 to">
 										<p className="lead marginbottom">To : {invoiceData.name} </p>
 										<p>Vehicle no: {invoiceData.vehicleNumber}</p>
 										<p>Address: {invoiceData.address}</p>
@@ -169,12 +183,6 @@ console.log('sdfasd');
 
 
 									</div>
-
-									{/* <div className="col-md-4 text-right payment-details">
-					<p className="lead marginbottom payment-info">Payment details</p>
-					<p>Date: 14 April 2014</p>
-					
-			    </div> */}
 
 								</div>
 
@@ -203,8 +211,6 @@ console.log('sdfasd');
 
 														</tr>
 													))}
-
-
 												</tbody>
 											</table>
 
@@ -247,26 +253,31 @@ console.log('sdfasd');
 									</div>
 
  : null} 
+			<br/>
 			<div className="row">
 			<div className="col-md-6 margintop">
 				<p className="lead marginbottom">THANK YOU!</p>
 
-				<button className="btn btn-success" id="printbutton"  onClick={printdoc}><i className="fa fa-print"/>Print Invoice</button>
+				
 				{/* <button className="btn btn-danger"><i className="fa fa-envelope-o"/>Mail Invoice</button> */}
 			</div>
 			<div className="col-md-6 text-right pull-right invoice-total">
-					  
-			          
-			          <p>Total : {sumvalue} </p>
+			          <h4>Total
+					  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					  {sumvalue} AED</h4>
 			</div>
 			</div>
 
 		  </div>
 		</div>
+		<div className="row">
+		<button className="btn btn-success" id="printbutton"  onClick={handlePrint}><i className="fa fa-print"/>Print Invoice</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button className="btn btn-danger" id="printbutton" onClick={data.onclose}>Close</button>
+		</div>
 	</div>
 </div>
 </div>
-   </>
+</Page>
   );
 };
 
